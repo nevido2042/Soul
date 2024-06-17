@@ -35,7 +35,17 @@ void ACharacterController::MoveForward(const FInputActionValue& Value)
 {
     if (APawn* ControlledPawn = GetPawn())
     {
-        ControlledPawn->AddMovementInput(ControlledPawn->GetActorForwardVector(), Value.Get<float>());
+        //ControlledPawn->AddMovementInput(ControlledPawn->GetActorForwardVector(), Value.Get<float>());
+
+        // find out which way is forward
+        const FRotator Rotation = GetControlRotation();
+        const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+        // get forward vector
+        const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+        // add movement 
+        ControlledPawn->AddMovementInput(ForwardDirection, Value.Get<float>());
     }
 }
 
@@ -43,7 +53,15 @@ void ACharacterController::MoveRight(const FInputActionValue& Value)
 {
     if (APawn* ControlledPawn = GetPawn())
     {
-        ControlledPawn->AddMovementInput(ControlledPawn->GetActorRightVector(), Value.Get<float>());
+        //ControlledPawn->AddMovementInput(ControlledPawn->GetActorRightVector(), Value.Get<float>());
+
+        const FRotator Rotation = GetControlRotation();
+        const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+        // get right vector 
+        const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+        ControlledPawn->AddMovementInput(RightDirection, Value.Get<float>());
     }
 }
 
