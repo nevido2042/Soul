@@ -28,6 +28,7 @@ void ACharacterController::SetupInputComponent()
         EnhancedInputComponent->BindAction(MoveRightAction, ETriggerEvent::Triggered, this, &ACharacterController::MoveRight);
         EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ACharacterController::Turn);
         EnhancedInputComponent->BindAction(LookUpAction, ETriggerEvent::Triggered, this, &ACharacterController::LookUp);
+        EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ACharacterController::Attack);
     }
 }
 
@@ -74,4 +75,9 @@ void ACharacterController::Turn(const FInputActionValue& Value)
 void ACharacterController::LookUp(const FInputActionValue& Value)
 {
     AddPitchInput(Value.Get<float>() * LookUpScale);
+}
+
+void ACharacterController::Attack()
+{
+    Cast<APlayerCharacter>(GetPawn())->Attack();
 }

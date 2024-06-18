@@ -32,6 +32,7 @@ private:
     void MoveRight(const FInputActionValue& Value);
     void Turn(const FInputActionValue& Value);
     void LookUp(const FInputActionValue& Value);
+    void Attack();
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* PlayerMappingContext;
@@ -47,6 +48,9 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* LookUpAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* AttackAction;
 
 protected:
     UPROPERTY(EditAnywhere)

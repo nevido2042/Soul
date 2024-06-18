@@ -35,4 +35,16 @@ protected:
 
 public:
 	USpringArmComponent* GetSpringArm() { return SpringArm; }
+
+public:
+	void Attack();
+
+private:
+	int AttackIndex = 0;
+
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AttackMontage = nullptr;
+
+	UFUNCTION()
+	void OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 };

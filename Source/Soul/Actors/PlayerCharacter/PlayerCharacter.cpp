@@ -22,6 +22,8 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APlayerCharacter::OnMontageNotifyBegin);
 }
 
 // Called every frame
@@ -36,5 +38,28 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void APlayerCharacter::Attack()
+{
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AttackMontage))
+	{
+		AttackIndex = 1;
+	}
+	else
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage);
+	}
+}
+
+void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	--AttackIndex;
+
+	if (AttackIndex < 0)
+	{
+		GetMesh()->GetAnimInstance()->Montage_Stop(0.35f, AttackMontage);
+		AttackIndex = 0;
+	}
 }
 
