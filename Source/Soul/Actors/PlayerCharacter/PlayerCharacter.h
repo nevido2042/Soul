@@ -43,7 +43,14 @@ public:
 public:
 	void Attack();
 	void Roll();
+	void Run();
+	void Walk();
 private:
+	bool bRun = false;
+
+	float RunSpeed = 600.f;
+	float WalkSpeed = 200.f;
+
 	int AttackIndex = 0;
 
 	UPROPERTY(EditAnywhere)

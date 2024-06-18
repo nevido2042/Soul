@@ -5,6 +5,7 @@
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -30,6 +31,11 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bRun == false)
+	{
+		Walk();
+	}
 
 }
 
@@ -70,6 +76,25 @@ void APlayerCharacter::Roll()
 	{
 		PlayAnimMontage(RollMontage);
 	}
+}
+
+void APlayerCharacter::Run()
+{
+	bRun = true;
+	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	float Scale = 3.f;
+	CurrentSpeed = FMathf::Lerp(CurrentSpeed, RunSpeed, GetWorld()->DeltaTimeSeconds * Scale);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Run"));
+}
+
+void APlayerCharacter::Walk()
+{
+	bRun = false;
+	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	float Scale = 3.f;
+	CurrentSpeed = FMathf::Lerp(CurrentSpeed, WalkSpeed, GetWorld()->DeltaTimeSeconds * Scale);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Walk"));
+
 }
 
 void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)

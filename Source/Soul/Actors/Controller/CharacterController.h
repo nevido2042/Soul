@@ -35,6 +35,7 @@ private:
     void Attack();
     void Roll();
     void Run();
+    void RunEnd();
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* PlayerMappingContext;

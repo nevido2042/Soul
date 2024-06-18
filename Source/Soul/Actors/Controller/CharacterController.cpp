@@ -16,6 +16,7 @@ void ACharacterController::BeginPlay()
     {
         Subsystem->AddMappingContext(PlayerMappingContext, 1);
     }
+
 }
 
 void ACharacterController::SetupInputComponent()
@@ -31,6 +32,7 @@ void ACharacterController::SetupInputComponent()
         EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ACharacterController::Attack);
         EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Completed, this, &ACharacterController::Roll);
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ACharacterController::Run);
+        EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &ACharacterController::RunEnd);
 
     }
 }
@@ -92,4 +94,10 @@ void ACharacterController::Roll()
 
 void ACharacterController::Run()
 {
+    Cast<APlayerCharacter>(GetPawn())->Run();
+}
+
+void ACharacterController::RunEnd()
+{
+    Cast<APlayerCharacter>(GetPawn())->Walk();
 }
