@@ -6,9 +6,13 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+class UAnimMontage;
+
 UCLASS()
 class SOUL_API APlayerCharacter : public ACharacter
 {
+
+
 	GENERATED_BODY()
 
 public:
@@ -38,12 +42,15 @@ public:
 
 public:
 	void Attack();
-
+	void Roll();
 private:
 	int AttackIndex = 0;
 
 	UPROPERTY(EditAnywhere)
-	class UAnimMontage* AttackMontage = nullptr;
+	UAnimMontage* AttackMontage = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* RollMontage = nullptr;
 
 	UFUNCTION()
 	void OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);

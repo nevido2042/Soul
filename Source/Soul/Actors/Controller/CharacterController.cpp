@@ -29,6 +29,7 @@ void ACharacterController::SetupInputComponent()
         EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ACharacterController::Turn);
         EnhancedInputComponent->BindAction(LookUpAction, ETriggerEvent::Triggered, this, &ACharacterController::LookUp);
         EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &ACharacterController::Attack);
+        EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Started, this, &ACharacterController::Roll);
     }
 }
 
@@ -80,4 +81,9 @@ void ACharacterController::LookUp(const FInputActionValue& Value)
 void ACharacterController::Attack()
 {
     Cast<APlayerCharacter>(GetPawn())->Attack();
+}
+
+void ACharacterController::Roll()
+{
+    Cast<APlayerCharacter>(GetPawn())->Roll();
 }

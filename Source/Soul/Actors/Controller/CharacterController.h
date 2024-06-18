@@ -33,6 +33,7 @@ private:
     void Turn(const FInputActionValue& Value);
     void LookUp(const FInputActionValue& Value);
     void Attack();
+    void Roll();
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* PlayerMappingContext;
@@ -51,6 +52,9 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* AttackAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* RollAction;
 
 protected:
     UPROPERTY(EditAnywhere)

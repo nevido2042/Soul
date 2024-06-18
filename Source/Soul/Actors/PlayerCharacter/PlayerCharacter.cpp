@@ -48,7 +48,19 @@ void APlayerCharacter::Attack()
 	}
 	else
 	{
-		GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage);
+		PlayAnimMontage(AttackMontage);
+	}
+}
+
+void APlayerCharacter::Roll()
+{
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(RollMontage))
+	{
+		return;
+	}
+	else 
+	{
+		PlayAnimMontage(RollMontage);
 	}
 }
 
