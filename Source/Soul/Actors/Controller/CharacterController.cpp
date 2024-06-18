@@ -67,20 +67,11 @@ void ACharacterController::MoveRight(const FInputActionValue& Value)
 
 void ACharacterController::Turn(const FInputActionValue& Value)
 {
-    /*if (APlayerCharacter* PC = Cast<APlayerCharacter>(GetPawn()))
-    {
-        PC->GetSpringArm()->AddRelativeRotation(FRotator(0.0f, Value.Get<float>() * TurnScale, 0.0f)); 
-    }*/
 
     AddYawInput(Value.Get<float>() * TurnScale);
 }
 
 void ACharacterController::LookUp(const FInputActionValue& Value)
 {
-    /*if (APlayerCharacter* PC = Cast<APlayerCharacter>(GetPawn()))
-    {
-        PC->GetSpringArm()->AddRelativeRotation(FRotator(Value.Get<float>() * LookUpScale, 0.0f, 0.0f)); 
-    }*/
-
     AddPitchInput(Value.Get<float>() * LookUpScale);
 }
