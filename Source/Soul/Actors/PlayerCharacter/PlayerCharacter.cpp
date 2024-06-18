@@ -42,7 +42,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::Attack()
 {
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AttackMontage))
+	UAnimInstance* Anim = GetMesh()->GetAnimInstance();
+
+	if (Anim->Montage_IsPlaying(RollMontage))
+	{
+		return;
+	}
+
+	if (Anim->Montage_IsPlaying(AttackMontage))
 	{
 		AttackIndex = 1;
 	}
@@ -54,7 +61,8 @@ void APlayerCharacter::Attack()
 
 void APlayerCharacter::Roll()
 {
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(RollMontage))
+	UAnimInstance* Anim = GetMesh()->GetAnimInstance();
+	if (Anim->Montage_IsPlaying(RollMontage)|| Anim->Montage_IsPlaying(AttackMontage))
 	{
 		return;
 	}
