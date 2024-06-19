@@ -99,5 +99,5 @@ void ACharacterController::Run()
 
 void ACharacterController::RunEnd()
 {
-    Cast<APlayerCharacter>(GetPawn())->Walk();
+    Cast<APlayerCharacter>(GetPawn())->Jog();
 }

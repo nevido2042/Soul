@@ -34,7 +34,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (bRun == false)
 	{
-		Walk();
+		Jog();
 	}
 
 }
@@ -80,6 +80,8 @@ void APlayerCharacter::Roll()
 
 void APlayerCharacter::Run()
 {
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
 	bRun = true;
 	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	float Scale = 3.f;
@@ -87,12 +89,12 @@ void APlayerCharacter::Run()
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Run"));
 }
 
-void APlayerCharacter::Walk()
+void APlayerCharacter::Jog()
 {
 	bRun = false;
 	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	float Scale = 3.f;
-	CurrentSpeed = FMathf::Lerp(CurrentSpeed, WalkSpeed, GetWorld()->DeltaTimeSeconds * Scale);
+	CurrentSpeed = FMathf::Lerp(CurrentSpeed, JogSpeed, GetWorld()->DeltaTimeSeconds * Scale);
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Walk"));
 
 }

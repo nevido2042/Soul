@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -44,7 +42,7 @@ public:
 	void Attack();
 	void Roll();
 	void Run();
-	void Walk();
+	void Jog();
 private:
 	bool bRun = false;
 
@@ -52,7 +50,7 @@ private:
 	float RunSpeed = 600.f;
 
 	UPROPERTY(EditAnywhere)
-	float WalkSpeed = 200.f;
+	float JogSpeed = 300.f;
 
 	int AttackIndex = 0;
 
