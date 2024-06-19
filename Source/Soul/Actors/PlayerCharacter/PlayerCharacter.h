@@ -48,7 +48,10 @@ public:
 private:
 	bool bRun = false;
 
+	UPROPERTY(EditAnywhere)
 	float RunSpeed = 600.f;
+
+	UPROPERTY(EditAnywhere)
 	float WalkSpeed = 200.f;
 
 	int AttackIndex = 0;
