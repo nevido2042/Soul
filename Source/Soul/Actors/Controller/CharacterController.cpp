@@ -89,7 +89,7 @@ void ACharacterController::Attack()
 
 void ACharacterController::Roll()
 {
-    Cast<APlayerCharacter>(GetPawn())->Roll();
+    Cast<APlayerCharacter>(GetPawn())->RollOrDodge();
 }
 
 void ACharacterController::Run()

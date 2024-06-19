@@ -40,7 +40,7 @@ public:
 
 public:
 	void Attack();
-	void Roll();
+	void RollOrDodge();
 	void Run();
 	void Jog();
 private:
@@ -59,6 +59,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* RollMontage = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* BackDodgeMontage = nullptr;
 
 	UFUNCTION()
 	void OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);

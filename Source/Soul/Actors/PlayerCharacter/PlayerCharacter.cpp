@@ -50,35 +50,46 @@ void APlayerCharacter::Attack()
 {
 	UAnimInstance* Anim = GetMesh()->GetAnimInstance();
 
-	if (Anim->Montage_IsPlaying(RollMontage))
-	{
-		return;
-	}
-
 	if (Anim->Montage_IsPlaying(AttackMontage))
 	{
 		AttackIndex = 1;
 	}
 	else
 	{
+		if (Anim->IsAnyMontagePlaying()/*Anim->Montage_IsPlaying(RollMontage)*/)
+		{
+			return;
+		}
+
+		if (GetCharacterMovement()->IsFalling())
+		{
+			return;
+		}
+
 		PlayAnimMontage(AttackMontage);
 	}
 }
 
-void APlayerCharacter::Roll()
+void APlayerCharacter::RollOrDodge()
 {
 	UAnimInstance* Anim = GetMesh()->GetAnimInstance();
 
-	if (CanJump() == false)
+	if (Anim->IsAnyMontagePlaying())
 	{
 		return;
 	}
 
-	if (Anim->Montage_IsPlaying(RollMontage)|| Anim->Montage_IsPlaying(AttackMontage))
+	if (GetCharacterMovement()->IsFalling())
 	{
 		return;
 	}
-	else 
+
+	if (GetLastMovementInputVector().Rotation() == FRotator::ZeroRotator)
+	{
+		PlayAnimMontage(BackDodgeMontage);
+		return;
+	}
+	
 	{
 		FRotator Rotation = GetLastMovementInputVector().Rotation();
 		SetActorRotation(Rotation);
