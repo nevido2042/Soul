@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* SpringArm = nullptr;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UCameraComponent* Camera = nullptr;
 
 public:

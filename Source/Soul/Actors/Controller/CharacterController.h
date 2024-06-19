@@ -61,10 +61,13 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* RunAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* TargetLockOnAction;
+
 protected:
     UPROPERTY(EditAnywhere)
-    float TurnScale = 0.2f; // È¸Àü ¼Óµµ ½ºÄÉÀÏ
+    float TurnScale = 0.2f; // È¸ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     UPROPERTY(EditAnywhere)
-    float LookUpScale = 0.2f; // È¸Àü ¼Óµµ ½ºÄÉÀÏ
+    float LookUpScale = 0.2f; // È¸ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 };
