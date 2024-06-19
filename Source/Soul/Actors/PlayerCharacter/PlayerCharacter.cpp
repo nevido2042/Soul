@@ -68,20 +68,27 @@ void APlayerCharacter::Attack()
 void APlayerCharacter::Roll()
 {
 	UAnimInstance* Anim = GetMesh()->GetAnimInstance();
+
+	if (CanJump() == false)
+	{
+		return;
+	}
+
 	if (Anim->Montage_IsPlaying(RollMontage)|| Anim->Montage_IsPlaying(AttackMontage))
 	{
 		return;
 	}
 	else 
 	{
+		FRotator Rotation = GetLastMovementInputVector().Rotation();
+		SetActorRotation(Rotation);
+
 		PlayAnimMontage(RollMontage);
 	}
 }
 
 void APlayerCharacter::Run()
 {
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-
 	bRun = true;
 	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	float Scale = 3.f;
