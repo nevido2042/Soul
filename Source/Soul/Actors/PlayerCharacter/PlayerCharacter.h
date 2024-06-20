@@ -43,8 +43,13 @@ public:
 	void RollOrDodge();
 	void Run();
 	void Jog();
+
+	UFUNCTION(BlueprintCallable)
+	void SetStrongAttack(bool Value) { bStrongAttack = Value; }
 private:
 	bool bRun = false;
+
+	bool bStrongAttack = false;
 
 	UPROPERTY(EditAnywhere)
 	float RunSpeed = 600.f;
@@ -56,6 +61,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* AttackMontage = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* StrongAttackMontage = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* RollMontage = nullptr;

@@ -50,18 +50,31 @@ void APlayerCharacter::Attack()
 {
 	UAnimInstance* Anim = GetMesh()->GetAnimInstance();
 
-	if (Anim->Montage_IsPlaying(AttackMontage))
+	if (GetCharacterMovement()->IsFalling())
+	{
+		return;
+	}
+
+	if (Anim->Montage_IsPlaying(StrongAttackMontage))
 	{
 		AttackIndex = 1;
 	}
-	else
+	else if (Anim->Montage_IsPlaying(AttackMontage))
 	{
-		if (Anim->IsAnyMontagePlaying()/*Anim->Montage_IsPlaying(RollMontage)*/)
+		AttackIndex = 1;
+	}
+	else if (bStrongAttack)
+	{
+		if (Anim->IsAnyMontagePlaying())
 		{
 			return;
 		}
 
-		if (GetCharacterMovement()->IsFalling())
+		PlayAnimMontage(StrongAttackMontage);
+	}
+	else
+	{
+		if (Anim->IsAnyMontagePlaying())
 		{
 			return;
 		}
@@ -123,7 +136,7 @@ void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPo
 
 	if (AttackIndex < 0)
 	{
-		GetMesh()->GetAnimInstance()->Montage_Stop(0.35f, AttackMontage);
+		GetMesh()->GetAnimInstance()->Montage_Stop(0.35f);
 		AttackIndex = 0;
 	}
 }
