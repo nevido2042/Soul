@@ -79,7 +79,7 @@ private:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	class UStatusWidget* StatusUIAsset = nullptr;
+	TSubclassOf<UUserWidget> StatusUIAsset = nullptr;
 
 	UUserWidget* StatusUI = nullptr;
 };
