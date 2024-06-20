@@ -36,6 +36,10 @@ private:
     void Roll();
     void Run();
     void RunEnd();
+    void Jump();
+    void PressStrongAttack();
+    void ReleaseStrongAttack();
+
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputMappingContext* PlayerMappingContext;
@@ -63,6 +67,12 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* TargetLockOnAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* StrongAttackAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* JumpAction;
 
 protected:
     UPROPERTY(EditAnywhere)

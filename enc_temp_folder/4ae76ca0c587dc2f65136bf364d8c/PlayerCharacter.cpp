@@ -28,6 +28,9 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APlayerCharacter::OnMontageNotifyBegin);
+
+	StatusUI = CreateWidget(StatusUIAsset);
+	StatusUI->AddToViewport();
 }
 
 // Called every frame

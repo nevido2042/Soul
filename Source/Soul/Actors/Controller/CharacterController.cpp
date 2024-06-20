@@ -33,6 +33,10 @@ void ACharacterController::SetupInputComponent()
         EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Completed, this, &ACharacterController::Roll);
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ACharacterController::Run);
         EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Completed, this, &ACharacterController::RunEnd);
+        EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacterController::Jump);
+        EnhancedInputComponent->BindAction(StrongAttackAction, ETriggerEvent::Started, this, &ACharacterController::PressStrongAttack);
+        EnhancedInputComponent->BindAction(StrongAttackAction, ETriggerEvent::Completed, this, &ACharacterController::ReleaseStrongAttack);
+
 
     }
 }
@@ -100,4 +104,19 @@ void ACharacterController::Run()
 void ACharacterController::RunEnd()
 {
     Cast<APlayerCharacter>(GetPawn())->Jog();
+}
+
+void ACharacterController::Jump()
+{
+    Cast<APlayerCharacter>(GetPawn())->Jump();
+}
+
+void ACharacterController::PressStrongAttack()
+{
+    Cast<APlayerCharacter>(GetPawn())->SetStrongAttack(true);
+}
+
+void ACharacterController::ReleaseStrongAttack()
+{
+    Cast<APlayerCharacter>(GetPawn())->SetStrongAttack(false);
 }

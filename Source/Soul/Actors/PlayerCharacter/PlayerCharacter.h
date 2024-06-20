@@ -5,6 +5,7 @@
 #include "PlayerCharacter.generated.h"
 
 class UAnimMontage;
+class UUserWidget;
 
 UCLASS()
 class SOUL_API APlayerCharacter : public ACharacter
@@ -43,6 +44,7 @@ public:
 	void RollOrDodge();
 	void Run();
 	void Jog();
+	virtual void Jump() override;
 
 	UFUNCTION(BlueprintCallable)
 	void SetStrongAttack(bool Value) { bStrongAttack = Value; }
@@ -74,4 +76,10 @@ private:
 
 	UFUNCTION()
 	void OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+
+protected:
+	UPROPERTY(EditAnywhere)
+	class UStatusWidget* StatusUIAsset = nullptr;
+
+	UUserWidget* StatusUI = nullptr;
 };
