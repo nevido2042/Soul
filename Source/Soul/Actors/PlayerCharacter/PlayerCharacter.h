@@ -46,6 +46,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetStrongAttack(bool Value) { bStrongAttack = Value; }
+
 private:
 	bool bRun = false;
 
