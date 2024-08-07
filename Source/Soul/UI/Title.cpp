@@ -23,7 +23,7 @@ void UTitle::NativeConstruct()
 
 void UTitle::OnGameStartBtnClicked()
 {
-	UGameplayStatics::OpenLevel(this, TEXT("BaseMap"));
+	UGameplayStatics::OpenLevel(this, TEXT("DungeonMap"));
 }
 
 void UTitle::OnExitClicked()
