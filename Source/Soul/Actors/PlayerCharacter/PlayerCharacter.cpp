@@ -20,6 +20,9 @@ APlayerCharacter::APlayerCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
+	Weapon->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -31,6 +34,19 @@ void APlayerCharacter::BeginPlay()
 
 	StatusUI = CreateWidget(GetWorld(), StatusUIAsset);
 	StatusUI->AddToViewport();
+
+	AActor* WeaponActor = Weapon->GetChildActor();
+	if (WeaponActor)
+	{
+		WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+
+		//FVector Location(-6.313255f, -19.926998f, 8.154418f);
+		//FRotator Rotation(-25.4513f, 89.195738f, 81.288308f); // Pitch, Yaw, Roll ¼ø¼­
+		//WeaponActor->SetActorRelativeRotation(Rotation);
+		//WeaponActor->SetActorRelativeLocation(Location);
+	}
+
+
 }
 
 // Called every frame

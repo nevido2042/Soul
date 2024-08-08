@@ -36,6 +36,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UCameraComponent* Camera = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UChildActorComponent* Weapon = nullptr;
+
 public:
 	USpringArmComponent* GetSpringArm() { return SpringArm; }
 
