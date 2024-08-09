@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/EnemyHPBar.h"
+#include "AnimInstances/EnemyAnimInstance.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -40,6 +41,12 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	if (UEnemyHealthBar* EnemyHPBar = Cast<UEnemyHealthBar>(HealthBarWidgetComponent->GetWidget()))
 	{
 		EnemyHPBar->UpdateHPBar(HealthComponent->CurrentHealth / HealthComponent->DefaultHealth);
+	}
+
+	if (HealthComponent->CurrentHealth <= 0.f)
+	{
+		//die
+		Cast<UEnemyAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
 	}
 
 	return 0.0f;

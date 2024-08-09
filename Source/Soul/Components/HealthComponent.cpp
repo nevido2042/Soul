@@ -24,7 +24,8 @@ void UHealthComponent::TakeDamage(float DamageAmount)
 	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.0f, DefaultHealth);
 	if (CurrentHealth <= 0.f)
 	{
-		// 캐릭터가 죽었을 때의 로직 추가
+		//die
+		
 	}
 }
 
