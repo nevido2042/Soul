@@ -10,7 +10,7 @@ void UWeaponActivateNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimS
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(MeshComp->GetOwner());
 
 	Sword = PlayerCharacter->GetSword();
-	Sword->BeginHitDetect();
+	Sword->HitDetectStart();
 }
 
 void UWeaponActivateNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
@@ -20,5 +20,4 @@ void UWeaponActivateNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSe
 
 void UWeaponActivateNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-	Sword->EndHitDetect();
 }

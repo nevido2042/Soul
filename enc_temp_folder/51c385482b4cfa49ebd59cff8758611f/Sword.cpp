@@ -4,7 +4,6 @@
 #include "Actors/Weapons/Sword.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASword::ASword()
@@ -20,19 +19,18 @@ ASword::ASword()
 void ASword::BeginPlay()
 {
 	Super::BeginPlay();
+	IgnoreActors.Add(this);
 }
 
-void ASword::BeginHitDetect()
+void ASword::HitDetectStart()
 {
 	LastHitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
 	LastHitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
-
-	IgnoreActors.Add(this);
-	IgnoreActors.Add(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 }
 
 void ASword::HitDetect()
 {
+
 	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
 	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
 
@@ -83,86 +81,76 @@ void ASword::HitDetect()
 			FVector(Distance, 5.f, 5.f), Dir.Rotation(), TraceTypeQuery4, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green, FLinearColor::Red, 0.5f);
 	}
 
-	if (bHit)
-	{
-		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 10.f, nullptr, nullptr, nullptr);
-		IgnoreActors.Add(HitResult.GetActor());
-	}
 }
 
-void ASword::EndHitDetect()
+void ASword::HitDetectImpl(FHitResult& InHitResult)
 {
-	IgnoreActors.Empty();
-}
+	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
+	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
 
-//void ASword::HitDetectImpl(FHitResult& InHitResult)
-//{
-//	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
-//	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
-//
-//	DrawDebugLine(
-//		GetWorld(),
-//		HitStart,
-//		InHitResult.Location,
-//		FColor::Red,
-//		false, 10.0f, 0, 1.0f
-//	);
-//
-//
-//	DrawDebugSphere(
-//		GetWorld(),
-//		InHitResult.Location,
-//		2.0f,
-//		24,
-//		FColor::Red,
-//		false, 10.0f
-//	);
-//
-//	/*if (AWeapon* HitWeapon = Cast<AWeapon>(InHitResult.GetActor()))
-//	{
-//		if (Owner)
-//		{
-//			Owner->GetCharacter()->StopAnimMontage();
-//		}
-//		ParticleComponent->SetTemplate(Particles[1]);
-//		ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
-//		ParticleComponent->ActivateSystem();
-//
-//		SetRandomSoundAndPlay();
-//
-//		return;
-//	}*/
-//
-//
-//	/*if (AShield* HitShield = Cast<AShield>(InHitResult.GetActor()))
-//	{
-//		AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
-//		if (MnBCharacter)
-//		{
-//			if (Owner)
-//			{
-//				Owner->GetCharacter()->StopAnimMontage();
-//				MnBCharacter->Blocked();
-//
-//				ParticleComponent->SetTemplate(Particles[1]);
-//				ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
-//				ParticleComponent->ActivateSystem();
-//
-//				SetRandomSoundAndPlay();
-//
-//				return;
-//			}
-//
-//		}
-//	}*/
-//
-//	/*ParticleComponent->SetTemplate(Particles[0]);
-//	ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
-//	ParticleComponent->ActivateSystem();
-//
-//	UGameplayStatics::ApplyDamage(InHitResult.GetActor(), 1, Owner, this, nullptr);
-//
-//	bApplyDamage = true;*/
-//}
+	DrawDebugLine(
+		GetWorld(),
+		HitStart,
+		InHitResult.Location,
+		FColor::Red,
+		false, 10.0f, 0, 1.0f
+	);
+
+
+	DrawDebugSphere(
+		GetWorld(),
+		InHitResult.Location,
+		2.0f,
+		24,
+		FColor::Red,
+		false, 10.0f
+	);
+
+	/*if (AWeapon* HitWeapon = Cast<AWeapon>(InHitResult.GetActor()))
+	{
+		if (Owner)
+		{
+			Owner->GetCharacter()->StopAnimMontage();
+		}
+		ParticleComponent->SetTemplate(Particles[1]);
+		ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
+		ParticleComponent->ActivateSystem();
+
+		SetRandomSoundAndPlay();
+
+		return;
+	}*/
+
+
+	/*if (AShield* HitShield = Cast<AShield>(InHitResult.GetActor()))
+	{
+		AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
+		if (MnBCharacter)
+		{
+			if (Owner)
+			{
+				Owner->GetCharacter()->StopAnimMontage();
+				MnBCharacter->Blocked();
+
+				ParticleComponent->SetTemplate(Particles[1]);
+				ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
+				ParticleComponent->ActivateSystem();
+
+				SetRandomSoundAndPlay();
+
+				return;
+			}
+
+		}
+	}*/
+
+	/*ParticleComponent->SetTemplate(Particles[0]);
+	ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
+	ParticleComponent->ActivateSystem();
+
+	UGameplayStatics::ApplyDamage(InHitResult.GetActor(), 1, Owner, this, nullptr);
+
+	bApplyDamage = true;*/
+}
 
 

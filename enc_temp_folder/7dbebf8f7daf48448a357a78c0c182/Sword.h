@@ -23,11 +23,10 @@ protected:
 	UStaticMeshComponent* StaticMeshComponent = nullptr;
 
 public:
-	void BeginHitDetect();
+	void HitDetectStart();
 	void HitDetect();
-	void EndHitDetect();
 protected:
-	/*void HitDetectImpl(FHitResult& InHitResult);*/
+	void HitDetectImpl(FHitResult& InHitResult);
 	friend class FLastCache;
 	FVector LastHitStart;
 	FVector LastHitEnd;

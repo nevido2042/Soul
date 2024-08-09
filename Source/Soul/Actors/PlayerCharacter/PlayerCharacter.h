@@ -42,6 +42,8 @@ protected:
 public:
 	USpringArmComponent* GetSpringArm() { return SpringArm; }
 
+	class ASword* GetSword();
+
 public:
 	void Attack();
 	void RollOrDodge();

@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/StatusWidget.h"
+#include "Actors/Weapons/Sword.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -41,7 +42,7 @@ void APlayerCharacter::BeginPlay()
 		WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 
 		//FVector Location(-6.313255f, -19.926998f, 8.154418f);
-		//FRotator Rotation(-25.4513f, 89.195738f, 81.288308f); // Pitch, Yaw, Roll ¼ø¼­
+		//FRotator Rotation(-25.4513f, 89.195738f, 81.288308f); // Pitch, Yaw, Roll ï¿½ï¿½ï¿½ï¿½
 		//WeaponActor->SetActorRelativeRotation(Rotation);
 		//WeaponActor->SetActorRelativeLocation(Location);
 	}
@@ -66,6 +67,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+ASword* APlayerCharacter::GetSword()
+{
+	return Cast<ASword>(Weapon->GetChildActor());
 }
 
 void APlayerCharacter::Attack()
