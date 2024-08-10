@@ -24,6 +24,8 @@ APlayerCharacter::APlayerCharacter()
 
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(RootComponent);
+
+	/*SetGenericTeamId(FGenericTeamId(1));*/
 }
 
 // Called when the game starts or when spawned

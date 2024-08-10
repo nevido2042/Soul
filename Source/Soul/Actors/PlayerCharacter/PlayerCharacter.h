@@ -2,13 +2,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+//#include "GenericTeamAgentInterface.h" //team
 #include "PlayerCharacter.generated.h"
 
 class UAnimMontage;
 class UUserWidget;
 
 UCLASS()
-class SOUL_API APlayerCharacter : public ACharacter
+class SOUL_API APlayerCharacter : public ACharacter/*, public IGenericTeamAgentInterface*/
 {
 
 
@@ -87,4 +88,11 @@ protected:
 	TSubclassOf<UUserWidget> StatusUIAsset = nullptr;
 
 	UUserWidget* StatusUI = nullptr;
+
+//protected:
+//	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
+//	void SetGenericTeamId(const FGenericTeamId& NewTeamId) { TeamId = NewTeamId; }
+//
+//private:
+//	FGenericTeamId TeamId;
 };
