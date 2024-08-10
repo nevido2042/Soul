@@ -22,10 +22,17 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent = nullptr;
 
+	/*UPROPERTY(EditAnywhere)
+	USoundBase* HitSound = nullptr;*/
+
+	UPROPERTY(EditAnywhere)
+	class UAudioComponent* AudioComponent = nullptr;
+
 public:
 	void BeginHitDetect();
 	void HitDetect();
 	void EndHitDetect();
+
 protected:
 	/*void HitDetectImpl(FHitResult& InHitResult);*/
 	friend class FLastCache;

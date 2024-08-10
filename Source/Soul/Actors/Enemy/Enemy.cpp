@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "UI/EnemyHPBar.h"
 #include "AnimInstances/EnemyAnimInstance.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -20,15 +21,14 @@ AEnemy::AEnemy()
 	HealthBarWidgetComponent->SetupAttachment(RootComponent);
 	HealthBarWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
 	HealthBarWidgetComponent->SetDrawSize(FVector2D(200.0f, 50.0f));
+	HealthBarWidgetComponent->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	//test
-	UGameplayStatics::ApplyDamage(this, 30.f, nullptr, nullptr, nullptr);
+
 }
 
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -41,15 +41,25 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	if (UEnemyHealthBar* EnemyHPBar = Cast<UEnemyHealthBar>(HealthBarWidgetComponent->GetWidget()))
 	{
 		EnemyHPBar->UpdateHPBar(HealthComponent->CurrentHealth / HealthComponent->DefaultHealth);
+		
+		HealthBarWidgetComponent->SetVisibility(true);
+		FTimerHandle HealthHideTimer;
+		GetWorldTimerManager().SetTimer(HealthHideTimer, this, &AEnemy::HideHealthBar, 5.F, false);
 	}
 
 	if (HealthComponent->CurrentHealth <= 0.f)
 	{
 		//die
 		Cast<UEnemyAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 
 	return 0.0f;
+}
+
+void AEnemy::HideHealthBar()
+{
+	HealthBarWidgetComponent->SetVisibility(false);
 }
 
 

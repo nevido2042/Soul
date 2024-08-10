@@ -21,4 +21,5 @@ protected:
 
 protected:
 	class ASword* Sword = nullptr;
+	class APlayerCharacter* PlayerCharacter = nullptr;
 };
