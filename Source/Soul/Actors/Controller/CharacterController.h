@@ -10,13 +10,16 @@
 #include "InputAction.h"
 #include "InputMappingContext.h"
 
+#include "GenericTeamAgentInterface.h" //team
+
 #include "CharacterController.generated.h"
 
 /**
  * 
  */
+
 UCLASS()
-class SOUL_API ACharacterController : public APlayerController
+class SOUL_API ACharacterController : public APlayerController, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 public:
@@ -80,4 +83,12 @@ protected:
 
     UPROPERTY(EditAnywhere)
     float LookUpScale = 0.2f; // ȸ�� �ӵ� ������
+
+protected:
+    virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
+    void SetGenericTeamId(const FGenericTeamId& NewTeamId) { TeamId = NewTeamId; }
+    virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const
+
+private:
+	FGenericTeamId TeamId;
 };
