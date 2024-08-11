@@ -12,6 +12,7 @@
 #include "Components/HealthComponent.h"
 #include "Actors/PlayerState/SoulPlayerState.h"
 #include "HUD/SoulHUD.h"
+#include "AnimInstances/SoulPlayerAnimInstance.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -185,8 +186,28 @@ void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPo
 
 float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	SoulPlayerState->GetHealthComponent()->GetDamage(DamageAmount);
-	SoulHUD->UpdateStatusWidget();
+
+	if (SoulPlayerState)
+	{
+		SoulPlayerState->GetHealthComponent()->GetDamage(DamageAmount);
+		if (SoulPlayerState->GetHealthComponent()->CurrentHealth <= 0.f)
+		{
+			//die
+			Cast<USoulPlayerAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
+
+			APlayerController* PlayerController = Cast<APlayerController>(GetController());
+			if (PlayerController)
+			{
+				PlayerController->DisableInput(PlayerController);
+			}
+
+			GetCharacterMovement()->DisableMovement();
+		}
+	}
+	if (SoulHUD)
+	{
+		SoulHUD->UpdateStatusWidget();
+	}
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
