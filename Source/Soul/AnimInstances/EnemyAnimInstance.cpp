@@ -10,6 +10,8 @@ void UEnemyAnimInstance::NativeInitializeAnimation()
 
 	Pawn = TryGetPawnOwner();
 	if (!Pawn) { return; }
+
+    Character = Cast<ACharacter>(Pawn);
 }
 
 void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -18,7 +20,6 @@ void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
     if (!Pawn) { return; }
 
-    ACharacter* Character = Cast<ACharacter>(Pawn);
     if (Character)
     {
         MoveSpeed = Character->GetVelocity().Size();

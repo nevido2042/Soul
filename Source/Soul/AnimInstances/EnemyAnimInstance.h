@@ -19,7 +19,8 @@ protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 	APawn* Pawn;
-	
+	class ACharacter* Character;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool bDie = false;
 

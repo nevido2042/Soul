@@ -27,8 +27,6 @@ APlayerCharacter::APlayerCharacter()
 
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(RootComponent);
-
-	/*SetGenericTeamId(FGenericTeamId(1));*/
 }
 
 // Called when the game starts or when spawned
@@ -39,10 +37,6 @@ void APlayerCharacter::BeginPlay()
 	//Combo Attack
 	GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APlayerCharacter::OnMontageNotifyBegin);
 
-	
-	//StatusUI = CreateWidget(GetWorld(), StatusUIAsset);
-	//StatusUI->AddToViewport();
-	
 	//Status Widget
 	SoulPlayerState = Cast<ASoulPlayerState>(GetPlayerState());
 
