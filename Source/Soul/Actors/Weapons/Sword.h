@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/HitDetectable.h"
 #include "Sword.generated.h"
 
 UCLASS()
-class SOUL_API ASword : public AActor
+class SOUL_API ASword : public AActor, public IHitDetectable<ASword>
 {
 	GENERATED_BODY()
 	
@@ -29,16 +30,15 @@ protected:
 	class UAudioComponent* AudioComponent = nullptr;
 
 public:
-	void BeginHitDetect();
-	void HitDetect();
-	void EndHitDetect();
+	virtual void BeginHitDetect() override;
+	virtual void HitDetect() override;
+	virtual void EndHitDetect() override;
 
-protected:
-	/*void HitDetectImpl(FHitResult& InHitResult);*/
-	friend class FLastCache;
-	FVector LastHitStart;
-	FVector LastHitEnd;
-
-	TArray<AActor*> IgnoreActors;
+//protected:
+//	friend class FLastCache;
+//	FVector LastHitStart;
+//	FVector LastHitEnd;
+//
+//	TArray<AActor*> IgnoreActors;
 
 };
