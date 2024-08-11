@@ -34,4 +34,21 @@ public:
 private:
 	UFUNCTION()
 	void HideHealthBar();
+
+protected:
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* AttackMontage;
+public:
+	void Attack();
+
+	void BeginHitDetect();
+	void HitDetect();
+	void EndHitDetect();
+
+protected:
+	friend class FLastCache;
+	FVector LastHitStart;
+	FVector LastHitEnd;
+
+	TArray<AActor*> IgnoreActors;
 };

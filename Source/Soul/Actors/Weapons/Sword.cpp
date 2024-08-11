@@ -6,8 +6,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
-
-#define Hitable UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2)
+#include "Data/TraceData.h"
 
 // Sets default values
 ASword::ASword()
@@ -60,11 +59,11 @@ void ASword::HitDetect()
 
 	FHitResult HitResult;
 
-	float CapsuleRadius = 50.0f;
-	float CapsuleHalfHeight = 100.0f;
+	float CapsuleRadius = 10.0f;
+	//float CapsuleHalfHeight = 100.0f;
 
 
-	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(), HitStart, HitEnd, 5.f, Hitable, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green, FLinearColor::Red, 0.5f);
+	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(), HitStart, HitEnd, CapsuleRadius, Hitable, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green, FLinearColor::Red, 0.5f);
 	if (!bHit)
 	{
 		const FVector CenterStart = (LastHitStart + LastHitEnd) / 2.0;
@@ -74,7 +73,7 @@ void ASword::HitDetect()
 
 		double Distance = UKismetMathLibrary::Vector_Distance(HitStart, HitEnd) / 2.0;
 		bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), CenterStart, CenterEnd,
-			FVector(Distance, 5.f, 5.f), Dir.Rotation(), Hitable, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Blue, FLinearColor::Red, 0.5f);
+			FVector(Distance, CapsuleRadius, CapsuleRadius), Dir.Rotation(), Hitable, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Blue, FLinearColor::Red, 0.5f);
 	}
 
 	if (bHit)

@@ -4,19 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTService.h"
-#include "RandomMoveService.generated.h"
+#include "CheckAttackRangeService.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SOUL_API URandomMoveService : public UBTService
+class SOUL_API UCheckAttackRangeService : public UBTService
 {
 	GENERATED_BODY()
 	
 public:
-	URandomMoveService();
+	UCheckAttackRangeService();
 
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+
+private:
+	bool IsTargetInRange(AActor* TargetActor, AActor* ControlledPawn, float AttackRange) const;
 };

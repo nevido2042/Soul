@@ -11,6 +11,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AIController.h"
 #include "BrainComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Data/TraceData.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -73,6 +75,73 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 void AEnemy::HideHealthBar()
 {
 	HealthBarWidgetComponent->SetVisibility(false);
+}
+
+void AEnemy::Attack()
+{
+	if (AttackMontage == nullptr) return;
+
+	PlayAnimMontage(AttackMontage);
+}
+
+void AEnemy::BeginHitDetect()
+{
+	LastHitStart = GetMesh()->GetSocketLocation(TEXT("HitStart"));
+	LastHitEnd = GetMesh()->GetSocketLocation(TEXT("HitEnd"));
+
+	IgnoreActors.Add(this);
+}
+
+void AEnemy::HitDetect()
+{
+	FVector HitStart = GetMesh()->GetSocketLocation(TEXT("HitStart"));
+	FVector HitEnd = GetMesh()->GetSocketLocation(TEXT("HitEnd"));
+
+	struct FLastCache
+	{
+		FLastCache(AEnemy* InEnemy,
+			const FVector& InStart, const FVector& InEnd)
+			: Enemy(InEnemy), Start(InStart), End(InEnd) {}
+
+		~FLastCache()
+		{
+			Enemy->LastHitStart = Start;
+			Enemy->LastHitEnd = End;
+		}
+		AEnemy* Enemy = nullptr;
+		FVector Start, End;
+	}; FLastCache LastCache(this, HitStart, HitEnd);
+
+	FHitResult HitResult;
+
+	float CapsuleRadius = 30.0f;
+	//float CapsuleHalfHeight = 100.0f;
+
+
+	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(), HitStart, HitEnd, CapsuleRadius, Hitable, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green, FLinearColor::Red, 0.5f);
+	if (!bHit)
+	{
+		const FVector CenterStart = (LastHitStart + LastHitEnd) / 2.0;
+		const FVector CenterEnd = (HitStart + HitEnd) / 2.0;
+		FVector Dir = (HitEnd - HitStart);
+		Dir.Normalize();
+
+		double Distance = UKismetMathLibrary::Vector_Distance(HitStart, HitEnd) / 2.0;
+		bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), CenterStart, CenterEnd,
+			FVector(Distance, CapsuleRadius, CapsuleRadius), Dir.Rotation(), Hitable, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Blue, FLinearColor::Red, 0.5f);
+	}
+
+	if (bHit)
+	{
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 10.f, nullptr, nullptr, nullptr);
+		IgnoreActors.Add(HitResult.GetActor());
+		//AudioComponent->Play();
+	}
+}
+
+void AEnemy::EndHitDetect()
+{
+	IgnoreActors.Empty();
 }
 
 

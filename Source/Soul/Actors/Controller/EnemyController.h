@@ -31,11 +31,7 @@ protected:
 	void OnTargetPerceptionForgotten(AActor* Actor);
 
 protected:
-	/*virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
-	void SetGenericTeamId(const FGenericTeamId& NewTeamId) { TeamId = NewTeamId; }*/
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
-private:
-	/*FGenericTeamId TeamId;*/
 
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
