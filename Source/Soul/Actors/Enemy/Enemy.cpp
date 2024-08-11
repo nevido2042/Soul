@@ -8,6 +8,9 @@
 #include "UI/EnemyHPBar.h"
 #include "AnimInstances/EnemyAnimInstance.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "AIController.h"
+#include "BrainComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -52,6 +55,16 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 		//die
 		Cast<UEnemyAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		GetCharacterMovement()->StopMovementImmediately();
+		GetCharacterMovement()->DisableMovement();
+
+		// Stop the behavior tree
+		AAIController* AIController = Cast<AAIController>(GetController());
+		if (AIController && AIController->BrainComponent)
+		{
+			AIController->BrainComponent->StopLogic("Death");
+		}
 	}
 
 	return 0.0f;

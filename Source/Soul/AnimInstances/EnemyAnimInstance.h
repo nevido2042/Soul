@@ -23,6 +23,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool bDie = false;
 
+	UPROPERTY(BlueprintReadOnly)
+	float MoveSpeed;
+
 public:
 	void SetDie(bool InBool) { bDie = InBool; }
 };

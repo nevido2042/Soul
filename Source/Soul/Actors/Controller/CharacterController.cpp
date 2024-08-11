@@ -6,9 +6,6 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Data/TeamData.h"
 
-//const uint8 ATeam = 0;
-//const uint8 BTeam = 1;
-
 ACharacterController::ACharacterController()
 {
     SetGenericTeamId(FGenericTeamId(ATeam));

@@ -83,12 +83,4 @@ protected:
 
     UPROPERTY(EditAnywhere)
     float LookUpScale = 0.2f; // ȸ�� �ӵ� ������
-
-protected:
-    virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
-    void SetGenericTeamId(const FGenericTeamId& NewTeamId) { TeamId = NewTeamId; }
-    //virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const
-
-private:
-	FGenericTeamId TeamId;
 };

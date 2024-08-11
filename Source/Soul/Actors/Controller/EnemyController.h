@@ -27,10 +27,22 @@ protected:
 	UFUNCTION()
 	void OnTargetPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
 
+	UFUNCTION()
+	void OnTargetPerceptionForgotten(AActor* Actor);
+
 protected:
-	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
-	void SetGenericTeamId(const FGenericTeamId& NewTeamId) { TeamId = NewTeamId; }
-	//virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
+	/*virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
+	void SetGenericTeamId(const FGenericTeamId& NewTeamId) { TeamId = NewTeamId; }*/
+	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
 private:
-	FGenericTeamId TeamId;
+	/*FGenericTeamId TeamId;*/
+
+protected:
+	virtual void OnPossess(APawn* InPawn) override;
+
+	UPROPERTY(EditAnywhere)
+	UBehaviorTree* BehaviorTree;
+
+	UPROPERTY(EditAnywhere)
+	UBlackboardData* BlackboardData;
 };

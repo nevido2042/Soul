@@ -2,6 +2,7 @@
 
 
 #include "AnimInstances/EnemyAnimInstance.h"
+#include "GameFramework/Character.h"
 
 void UEnemyAnimInstance::NativeInitializeAnimation()
 {
@@ -13,5 +14,13 @@ void UEnemyAnimInstance::NativeInitializeAnimation()
 
 void UEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
-	Super::NativeUpdateAnimation(DeltaSeconds);
+    Super::NativeUpdateAnimation(DeltaSeconds);
+
+    if (!Pawn) { return; }
+
+    ACharacter* Character = Cast<ACharacter>(Pawn);
+    if (Character)
+    {
+        MoveSpeed = Character->GetVelocity().Size();
+    }
 }
