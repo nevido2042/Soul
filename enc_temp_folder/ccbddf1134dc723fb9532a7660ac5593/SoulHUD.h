@@ -23,9 +23,4 @@ protected:
 
 private:
     class UStatusWidget* StatusWidget;
-
-    class ASoulPlayerState* PlayerState;
-
-public:
-    void UpdateStatusWidget();
 };

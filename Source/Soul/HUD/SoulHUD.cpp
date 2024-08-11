@@ -3,33 +3,35 @@
 
 #include "HUD/SoulHUD.h"
 #include "Blueprint/UserWidget.h"
-
-//void ASoulHUD::DrawHUD()
-//{
-//    Super::DrawHUD();
-//
-//    if (HealthWidgetClass)
-//    {
-//        HealthWidget = CreateWidget<UUserWidget>(GetWorld(), HealthWidgetClass);
-//
-//        if (HealthWidget)
-//        {
-//            HealthWidget->AddToViewport();
-//        }
-//    }
-//}
+#include "UI/StatusWidget.h"
+#include "Actors/PlayerState/SoulPlayerState.h"
+#include "Components/HealthComponent.h"
 
 void ASoulHUD::BeginPlay()
 {
     Super::BeginPlay();
 
-    if (HealthWidgetClass)
+    if (StatusWidgetAsset)
     {
-        HealthWidget = CreateWidget<UUserWidget>(GetWorld(), HealthWidgetClass);
+        StatusWidget = CreateWidget<UStatusWidget>(GetWorld(), StatusWidgetAsset);
 
-        if (HealthWidget)
+        if (StatusWidget)
         {
-            HealthWidget->AddToViewport();
+            StatusWidget->AddToViewport();
         }
     }
+
+    APlayerController* PlayerController = GetOwningPlayerController();
+    if (PlayerController)
+    {
+        PlayerState = Cast<ASoulPlayerState>(PlayerController->PlayerState);
+    }
+
+    UpdateStatusWidget();
+}
+
+void ASoulHUD::UpdateStatusWidget()
+{
+    float InHealth = PlayerState->GetHealthComponent()->CurrentHealth / PlayerState->GetHealthComponent()->DefaultHealth;
+    StatusWidget->SetHealthBar(InHealth);
 }

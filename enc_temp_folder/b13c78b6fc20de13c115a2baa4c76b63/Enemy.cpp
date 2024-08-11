@@ -44,7 +44,7 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 {
 	if (HealthComponent)
 	{
-		HealthComponent->GetDamage(DamageAmount);
+		HealthComponent->TakeDamage(DamageAmount);
 	}
 	
 	if (UEnemyHealthBar* EnemyHPBar = Cast<UEnemyHealthBar>(HealthBarWidgetComponent->GetWidget()))

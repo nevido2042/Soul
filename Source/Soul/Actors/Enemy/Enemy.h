@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Interface/HitDetectable.h"
+//#include "Interface/HitDetectable.h"
 #include "Enemy.generated.h"
 
 class UHealthComponent;
 class UWidgetComponent;
 
 UCLASS()
-class SOUL_API AEnemy : public ACharacter, public IHitDetectable<AEnemy>
+class SOUL_API AEnemy : public ACharacter/*, public IHitDetectable<AEnemy>*/
 {
 	GENERATED_BODY()
 
@@ -39,18 +39,21 @@ private:
 protected:
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* AttackMontage;
+
+	UPROPERTY(EditAnywhere)
+	class UAudioComponent* AudioComponent;
 public:
 	void Attack();
 
 public:
-	virtual void BeginHitDetect() override;
-	virtual void HitDetect() override;
-	virtual void EndHitDetect() override;
+	void BeginHitDetect();
+	void HitDetect();
+	void EndHitDetect();
 
-//protected:
-//	friend class FLastCache;
-//	FVector LastHitStart;
-//	FVector LastHitEnd;
-//
-//	TArray<AActor*> IgnoreActors;
+protected:
+	friend class FLastCache;
+	FVector LastHitStart;
+	FVector LastHitEnd;
+
+	TArray<AActor*> IgnoreActors;
 };

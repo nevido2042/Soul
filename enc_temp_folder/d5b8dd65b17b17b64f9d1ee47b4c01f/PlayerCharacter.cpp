@@ -9,9 +9,6 @@
 #include "Blueprint/UserWidget.h"
 #include "UI/StatusWidget.h"
 #include "Actors/Weapons/Sword.h"
-#include "Components/HealthComponent.h"
-#include "Actors/PlayerState/SoulPlayerState.h"
-#include "HUD/SoulHUD.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -36,28 +33,23 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Combo Attack
 	GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &APlayerCharacter::OnMontageNotifyBegin);
 
-	
-	//StatusUI = CreateWidget(GetWorld(), StatusUIAsset);
-	//StatusUI->AddToViewport();
-	
-	//Status Widget
-	SoulPlayerState = Cast<ASoulPlayerState>(GetPlayerState());
+	StatusUI = CreateWidget(GetWorld(), StatusUIAsset);
+	StatusUI->AddToViewport();
 
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
-	if (PlayerController)
-	{
-		SoulHUD = Cast<ASoulHUD>(PlayerController->GetHUD());
-	}
-
-	//Weapon
 	AActor* WeaponActor = Weapon->GetChildActor();
 	if (WeaponActor)
 	{
 		WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+
+		//FVector Location(-6.313255f, -19.926998f, 8.154418f);
+		//FRotator Rotation(-25.4513f, 89.195738f, 81.288308f); // Pitch, Yaw, Roll ����
+		//WeaponActor->SetActorRelativeRotation(Rotation);
+		//WeaponActor->SetActorRelativeLocation(Location);
 	}
+
+
 }
 
 // Called every frame
@@ -187,13 +179,5 @@ void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPo
 		GetMesh()->GetAnimInstance()->Montage_Stop(0.35f);
 		AttackIndex = 0;
 	}
-}
-
-float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	SoulPlayerState->GetHealthComponent()->GetDamage(DamageAmount);
-	SoulHUD->UpdateStatusWidget();
-
-	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 

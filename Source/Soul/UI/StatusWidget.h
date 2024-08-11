@@ -9,9 +9,25 @@
 /**
  * 
  */
+class UProgressBar;
+
 UCLASS()
 class SOUL_API UStatusWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void NativeConstruct() override;
+
+protected:
+	UPROPERTY(meta = (BindWidget))
+	UProgressBar* HealthBar;
+
+	UPROPERTY(meta = (BindWidget))
+	UProgressBar* StaminaBar;
+
+public:
+	void SetHealthBar(float InValue);
+	void SetStaminaBar(float InValue);
+
 };

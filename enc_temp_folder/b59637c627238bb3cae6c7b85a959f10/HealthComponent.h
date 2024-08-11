@@ -28,5 +28,5 @@ public:
     float CurrentHealth;
 
 public:
-    void GetDamage(float DamageAmount);
+    void TakeDamage(float DamageAmount);
 };

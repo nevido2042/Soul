@@ -19,7 +19,7 @@ void UHealthComponent::BeginPlay()
 	CurrentHealth = DefaultHealth;
 }
 
-void UHealthComponent::GetDamage(float DamageAmount)
+void UHealthComponent::TakeDamage(float DamageAmount)
 {
 	CurrentHealth = FMath::Clamp(CurrentHealth - DamageAmount, 0.0f, DefaultHealth);
 	if (CurrentHealth <= 0.f)

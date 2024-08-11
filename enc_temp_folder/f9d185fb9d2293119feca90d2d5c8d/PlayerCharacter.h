@@ -83,11 +83,11 @@ private:
 	UFUNCTION()
 	void OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 
-//protected:
-//	UPROPERTY(EditAnywhere)
-//	TSubclassOf<UUserWidget> StatusUIAsset = nullptr;
-//
-//	UUserWidget* StatusUI = nullptr;
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> StatusUIAsset = nullptr;
+
+	UUserWidget* StatusUI = nullptr;
 
 //protected:
 //	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
@@ -95,11 +95,4 @@ private:
 //
 //private:
 //	FGenericTeamId TeamId;
-
-public:
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
-protected:
-	class ASoulPlayerState* SoulPlayerState;
-	class ASoulHUD* SoulHUD;
 };
