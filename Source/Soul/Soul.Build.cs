@@ -12,7 +12,8 @@ public class Soul : ModuleRules
         "EnhancedInput",
         "UMG",
         "AIModule",
-        "NavigationSystem"
+        "NavigationSystem",
+        "SlateCore"
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

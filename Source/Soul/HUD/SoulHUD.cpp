@@ -6,6 +6,7 @@
 #include "UI/StatusWidget.h"
 #include "Actors/PlayerState/SoulPlayerState.h"
 #include "Components/HealthComponent.h"
+#include "UI/GraphicsSettings.h"
 
 void ASoulHUD::BeginPlay()
 {
@@ -18,6 +19,16 @@ void ASoulHUD::BeginPlay()
         if (StatusWidget)
         {
             StatusWidget->AddToViewport();
+        }
+    }
+
+    if (GraphicSettingsWidgetAsset)
+    {
+        GraphicSettingsWidget = CreateWidget<UGraphicsSettings>(GetWorld(), GraphicSettingsWidgetAsset);
+
+        if (GraphicSettingsWidget)
+        {
+            GraphicSettingsWidget->AddToViewport();
         }
     }
 

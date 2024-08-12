@@ -21,8 +21,13 @@ protected:
     UPROPERTY(EditAnywhere, Category = "UI")
     TSubclassOf<class UUserWidget> StatusWidgetAsset;
 
+    UPROPERTY(EditAnywhere, Category = "UI")
+    TSubclassOf<class UUserWidget> GraphicSettingsWidgetAsset;
+
 private:
     class UStatusWidget* StatusWidget;
+
+    class UGraphicsSettings* GraphicSettingsWidget;
 
     class ASoulPlayerState* PlayerState;
 
