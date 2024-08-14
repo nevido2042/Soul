@@ -13,12 +13,16 @@ public class Soul : ModuleRules
         "UMG",
         "AIModule",
         "NavigationSystem",
+        "Slate",
         "SlateCore",
-        "UnrealEd",
         "AnimGraphRuntime",
         });
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+        // Editor 전용 모듈
+        if (Target.bBuildEditor == true)
+        {
+            PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd" });
+        }
 
         // Uncomment if you are using Slate UI
         // PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
