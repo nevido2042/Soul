@@ -13,7 +13,9 @@ public class Soul : ModuleRules
         "UMG",
         "AIModule",
         "NavigationSystem",
-        "SlateCore"
+        "SlateCore",
+        "UnrealEd",
+        "AnimGraphRuntime",
         });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

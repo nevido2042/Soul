@@ -4,6 +4,7 @@
 #include "AnimInstances/SoulPlayerAnimInstance.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "KismetAnimationLibrary.h"
 
 void USoulPlayerAnimInstance::NativeInitializeAnimation()
 {
@@ -32,6 +33,6 @@ void USoulPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
         bFalling = Character->GetCharacterMovement()->IsFalling();
 
-        MoveDirection = CalculateDirection(Character->GetVelocity(), Character->GetActorRotation());
+        MoveDirection = UKismetAnimationLibrary::CalculateDirection(Character->GetVelocity(), Character->GetActorRotation());
     }
 }

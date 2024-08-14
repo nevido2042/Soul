@@ -42,6 +42,7 @@ private:
     void Jump();
     void PressStrongAttack();
     void ReleaseStrongAttack();
+    void OpenPauseMenu();
 
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -76,6 +77,9 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* JumpAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* PauseMenuAction;
 
 protected:
     UPROPERTY(EditAnywhere)

@@ -192,6 +192,12 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		SoulPlayerState->GetHealthComponent()->GetDamage(DamageAmount);
 		if (SoulPlayerState->GetHealthComponent()->CurrentHealth <= 0.f)
 		{
+			if (bIsDie)
+			{
+				return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+			}
+
+			bIsDie = true;
 			//die
 			Cast<USoulPlayerAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
 
@@ -199,9 +205,12 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 			if (PlayerController)
 			{
 				PlayerController->DisableInput(PlayerController);
+
+				SoulHUD->ShowYouDied();
 			}
 
 			GetCharacterMovement()->DisableMovement();
+
 		}
 	}
 	if (SoulHUD)

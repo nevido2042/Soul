@@ -94,6 +94,9 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
+	bool bIsDie = false;
+
+protected:
 	class ASoulPlayerState* SoulPlayerState;
 	class ASoulHUD* SoulHUD;
 };

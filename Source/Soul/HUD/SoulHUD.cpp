@@ -7,6 +7,8 @@
 #include "Actors/PlayerState/SoulPlayerState.h"
 #include "Components/HealthComponent.h"
 #include "UI/GraphicsSettings.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+#include "UI/YouDiedWidget.h"
 
 void ASoulHUD::BeginPlay()
 {
@@ -22,6 +24,17 @@ void ASoulHUD::BeginPlay()
         }
     }
 
+    if (PauseMenuWidgetAsset)
+    {
+        PauseMenuWidget = CreateWidget<UUserWidget>(GetWorld(), PauseMenuWidgetAsset);
+
+        if (PauseMenuWidget)
+        {
+            PauseMenuWidget->AddToViewport();
+            PauseMenuWidget->SetVisibility(ESlateVisibility::Hidden);
+        }
+    }
+
     if (GraphicSettingsWidgetAsset)
     {
         GraphicSettingsWidget = CreateWidget<UGraphicsSettings>(GetWorld(), GraphicSettingsWidgetAsset);
@@ -29,6 +42,7 @@ void ASoulHUD::BeginPlay()
         if (GraphicSettingsWidget)
         {
             GraphicSettingsWidget->AddToViewport();
+            GraphicSettingsWidget->SetVisibility(ESlateVisibility::Hidden);
         }
     }
 
@@ -45,4 +59,47 @@ void ASoulHUD::UpdateStatusWidget()
 {
     float InHealth = PlayerState->GetHealthComponent()->CurrentHealth / PlayerState->GetHealthComponent()->DefaultHealth;
     StatusWidget->SetHealthBar(InHealth);
+}
+
+void ASoulHUD::OpenAndClosePauseMenu()
+{
+    if (PauseMenuWidget->GetVisibility() == ESlateVisibility::Visible)
+    {
+        PauseMenuWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+    else if (PauseMenuWidget->GetVisibility() == ESlateVisibility::Hidden)
+    {
+        PauseMenuWidget->SetVisibility(ESlateVisibility::Visible);
+
+        APlayerController* PlayerCont = GetWorld()->GetFirstPlayerController();
+        if (PlayerCont)
+        {
+            FInputModeUIOnly InputMode;
+            PlayerCont->SetInputMode(InputMode);
+            PlayerCont->bShowMouseCursor = true;
+        }
+    }
+}
+
+void ASoulHUD::OpenAndCloseGraphicSettings()
+{
+    if (GraphicSettingsWidget->GetVisibility() == ESlateVisibility::Visible)
+    {
+        GraphicSettingsWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+    else if (GraphicSettingsWidget->GetVisibility() == ESlateVisibility::Hidden)
+    {
+        GraphicSettingsWidget->SetVisibility(ESlateVisibility::Visible);
+    }
+}
+
+void ASoulHUD::ShowYouDied()
+{
+    UYouDiedWidget* YouDiedWidget = CreateWidget<UYouDiedWidget>(GetWorld(), YouDiedWidgetAsset);
+    if (YouDiedWidget)
+    {
+        YouDiedWidget->AddToViewport();
+
+        YouDiedWidget->PlayFadeInOutAnimation();
+    }
 }

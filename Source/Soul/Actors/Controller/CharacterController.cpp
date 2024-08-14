@@ -5,6 +5,7 @@
 #include "Actors/PlayerCharacter/PlayerCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Data/TeamData.h"
+#include "HUD/SoulHUD.h"
 
 ACharacterController::ACharacterController()
 {
@@ -39,6 +40,7 @@ void ACharacterController::SetupInputComponent()
         EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacterController::Jump);
         EnhancedInputComponent->BindAction(StrongAttackAction, ETriggerEvent::Started, this, &ACharacterController::PressStrongAttack);
         EnhancedInputComponent->BindAction(StrongAttackAction, ETriggerEvent::Completed, this, &ACharacterController::ReleaseStrongAttack);
+        EnhancedInputComponent->BindAction(PauseMenuAction, ETriggerEvent::Completed, this, &ACharacterController::OpenPauseMenu);
 
 
     }
@@ -122,4 +124,9 @@ void ACharacterController::PressStrongAttack()
 void ACharacterController::ReleaseStrongAttack()
 {
     Cast<APlayerCharacter>(GetPawn())->SetStrongAttack(false);
+}
+
+void ACharacterController::OpenPauseMenu()
+{
+    Cast<ASoulHUD>(GetHUD())->OpenAndClosePauseMenu();
 }

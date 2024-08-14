@@ -22,15 +22,29 @@ protected:
     TSubclassOf<class UUserWidget> StatusWidgetAsset;
 
     UPROPERTY(EditAnywhere, Category = "UI")
+    TSubclassOf<class UUserWidget> PauseMenuWidgetAsset;
+
+    UPROPERTY(EditAnywhere, Category = "UI")
     TSubclassOf<class UUserWidget> GraphicSettingsWidgetAsset;
+
+    UPROPERTY(EditAnywhere, Category = "UI")
+    TSubclassOf<class UUserWidget> YouDiedWidgetAsset;
 
 private:
     class UStatusWidget* StatusWidget;
 
     class UGraphicsSettings* GraphicSettingsWidget;
 
+    UUserWidget* PauseMenuWidget;
+
     class ASoulPlayerState* PlayerState;
 
 public:
     void UpdateStatusWidget();
+
+    void OpenAndClosePauseMenu();
+
+    void OpenAndCloseGraphicSettings();
+
+    void ShowYouDied();
 };
