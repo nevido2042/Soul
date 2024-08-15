@@ -55,12 +55,15 @@ protected:
     UPROPERTY(meta = (BindWidget))
     UComboBoxString* ShadingQualityDropdown;
 
+    UPROPERTY(meta = (BindWidget))
+    UComboBoxString* PostProcessingDropdown;
+
     //버튼
     UPROPERTY(meta = (BindWidget))
     UButton* BackButton;
 
     UFUNCTION()
-    void OnBackClicked();
+    void OnBackButtonClicked();
 
     // 이벤트 핸들러
     UFUNCTION()
@@ -95,4 +98,7 @@ protected:
 
     UFUNCTION()
     void OnShadingQualitySelectionChanged(FString SelectedItem, ESelectInfo::Type SelectionType);
+
+    UFUNCTION()
+    void OnPostProcessingSelectionChanged(FString SelectedItem, ESelectInfo::Type SelectionType);
 };

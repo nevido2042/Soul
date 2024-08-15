@@ -5,13 +5,13 @@
 #include "Components/Button.h"
 #include "HUD/SoulHUD.h"
 
-
-#if WITH_EDITOR
-#include "Editor.h"  // 또는 #include "Editor/EditorEngine.h"
-#endif
-
 void UGraphicsSettings::NativeConstruct()
 {
+    if (BackButton)
+    {
+        BackButton->OnClicked.AddDynamic(this, &UGraphicsSettings::OnBackButtonClicked);
+    }
+
     // 화면 모드 드롭다운 항목 추가 및 바인딩
     if (ScreenModeDropdown)
     {
@@ -21,10 +21,27 @@ void UGraphicsSettings::NativeConstruct()
         ScreenModeDropdown->AddOption(TEXT("Windowed"));
         ScreenModeDropdown->AddOption(TEXT("Windowed Fullscreen"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        ScreenModeDropdown->SetSelectedOption(TEXT("Windowed Fullscreen"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        EWindowMode::Type CurrentScreenMode = UserSettings->GetFullscreenMode();
+        FString SelectedOption;
+
+        switch (CurrentScreenMode)
+        {
+        case EWindowMode::Fullscreen:
+            SelectedOption = TEXT("Fullscreen");
+            break;
+        case EWindowMode::Windowed:
+            SelectedOption = TEXT("Windowed");
+            break;
+        case EWindowMode::WindowedFullscreen:
+            SelectedOption = TEXT("Windowed Fullscreen");
+            break;
+        default:
+            SelectedOption = TEXT("Windowed Fullscreen");
+            break;
+        }
+
+        ScreenModeDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 해상도 드롭다운 항목 추가 및 바인딩
@@ -37,10 +54,11 @@ void UGraphicsSettings::NativeConstruct()
         ResolutionDropdown->AddOption(TEXT("1280x720"));
         ResolutionDropdown->AddOption(TEXT("1920x1080"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        ResolutionDropdown->SetSelectedOption(TEXT("1920x1080"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        FIntPoint CurrentResolution = UserSettings->GetScreenResolution();
+        FString CurrentResolutionString = FString::Printf(TEXT("%dx%d"), CurrentResolution.X, CurrentResolution.Y);
+
+        ResolutionDropdown->SetSelectedOption(CurrentResolutionString);  // 기본 선택
     }
 
     // 그림자 품질 드롭다운 항목 추가 및 바인딩
@@ -54,10 +72,33 @@ void UGraphicsSettings::NativeConstruct()
         ShadowQualityDropdown->AddOption(TEXT("Epic"));
         ShadowQualityDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        ShadowQualityDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentShadowQuality = UserSettings->GetShadowQuality();
+        FString SelectedOption;
+
+        switch (CurrentShadowQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        ShadowQualityDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 텍스처 품질 드롭다운 항목 추가 및 바인딩
@@ -71,10 +112,33 @@ void UGraphicsSettings::NativeConstruct()
         TextureQualityDropdown->AddOption(TEXT("Epic"));
         TextureQualityDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        TextureQualityDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentTextureQuality = UserSettings->GetTextureQuality();
+        FString SelectedOption;
+
+        switch (CurrentTextureQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        TextureQualityDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 반사 품질 드롭다운 항목 추가 및 바인딩
@@ -88,10 +152,33 @@ void UGraphicsSettings::NativeConstruct()
         ReflectionQualityDropdown->AddOption(TEXT("Epic"));
         ReflectionQualityDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        ReflectionQualityDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentReflectionQuality = UserSettings->GetReflectionQuality();
+        FString SelectedOption;
+
+        switch (CurrentReflectionQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        ReflectionQualityDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 뷰 거리 드롭다운 항목 추가 및 바인딩
@@ -105,10 +192,33 @@ void UGraphicsSettings::NativeConstruct()
         ViewDistanceDropdown->AddOption(TEXT("Epic"));
         ViewDistanceDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        ViewDistanceDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentViewDistanceQuality = UserSettings->GetViewDistanceQuality();
+        FString SelectedOption;
+
+        switch (CurrentViewDistanceQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        ViewDistanceDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 전역 조명 드롭다운 항목 추가 및 바인딩
@@ -122,10 +232,33 @@ void UGraphicsSettings::NativeConstruct()
         GlobalIlluminationDropdown->AddOption(TEXT("Epic"));
         GlobalIlluminationDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        GlobalIlluminationDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentGlobalIlluminationQuality = UserSettings->GetGlobalIlluminationQuality();
+        FString SelectedOption;
+
+        switch (CurrentGlobalIlluminationQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        GlobalIlluminationDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 안티 에일리어싱 드롭다운 항목 추가 및 바인딩
@@ -139,10 +272,33 @@ void UGraphicsSettings::NativeConstruct()
         AntiAliasingDropdown->AddOption(TEXT("Epic"));
         AntiAliasingDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        AntiAliasingDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentAntiAliasingQuality = UserSettings->GetAntiAliasingQuality();
+        FString SelectedOption;
+
+        switch (CurrentAntiAliasingQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        AntiAliasingDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 이펙트 품질 드롭다운 항목 추가 및 바인딩
@@ -156,10 +312,33 @@ void UGraphicsSettings::NativeConstruct()
         EffectsQualityDropdown->AddOption(TEXT("Epic"));
         EffectsQualityDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        EffectsQualityDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentEffectsQuality = UserSettings->GetVisualEffectQuality();
+        FString SelectedOption;
+
+        switch (CurrentEffectsQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        EffectsQualityDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 식생 품질 드롭다운 항목 추가 및 바인딩
@@ -173,10 +352,33 @@ void UGraphicsSettings::NativeConstruct()
         FoliageQualityDropdown->AddOption(TEXT("Epic"));
         FoliageQualityDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        FoliageQualityDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentFoliageQuality = UserSettings->GetFoliageQuality();
+        FString SelectedOption;
+
+        switch (CurrentFoliageQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        FoliageQualityDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
     // 쉐이딩 품질 드롭다운 항목 추가 및 바인딩
@@ -190,21 +392,77 @@ void UGraphicsSettings::NativeConstruct()
         ShadingQualityDropdown->AddOption(TEXT("Epic"));
         ShadingQualityDropdown->AddOption(TEXT("Cinematic"));
 
-#if !WITH_EDITOR
-        // 에디터 모드에서는 기본 선택값을 설정하지 않음
-        ShadingQualityDropdown->SetSelectedOption(TEXT("Epic"));  // 기본 선택
-#endif
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentShadingQuality = UserSettings->GetShadingQuality();
+        FString SelectedOption;
+
+        switch (CurrentShadingQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        ShadingQualityDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
     }
 
-    // 백 버튼 클릭 시 호출되는 함수 바인딩
-    if (BackButton)
+    // 포스트 프로세싱 품질 드롭다운 항목 추가 및 바인딩
+    if (PostProcessingDropdown)
     {
-        BackButton->OnClicked.AddDynamic(this, &UGraphicsSettings::OnBackClicked);
-    }
+        PostProcessingDropdown->OnSelectionChanged.AddDynamic(this, &UGraphicsSettings::OnPostProcessingSelectionChanged);
 
+        PostProcessingDropdown->AddOption(TEXT("Low"));
+        PostProcessingDropdown->AddOption(TEXT("Medium"));
+        PostProcessingDropdown->AddOption(TEXT("High"));
+        PostProcessingDropdown->AddOption(TEXT("Epic"));
+        PostProcessingDropdown->AddOption(TEXT("Cinematic"));
+
+        UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+        int32 CurrentPostProcessingQuality = UserSettings->GetPostProcessingQuality();
+        FString SelectedOption;
+
+        switch (CurrentPostProcessingQuality)
+        {
+        case 0:
+            SelectedOption = TEXT("Low");
+            break;
+        case 1:
+            SelectedOption = TEXT("Medium");
+            break;
+        case 2:
+            SelectedOption = TEXT("High");
+            break;
+        case 3:
+            SelectedOption = TEXT("Epic");
+            break;
+        case 4:
+            SelectedOption = TEXT("Cinematic");
+            break;
+        default:
+            SelectedOption = TEXT("Epic");
+            break;
+        }
+
+        PostProcessingDropdown->SetSelectedOption(SelectedOption);  // 기본 선택
+    }
 }
 
-void UGraphicsSettings::OnBackClicked()
+void UGraphicsSettings::OnBackButtonClicked()
 {
     SetVisibility(ESlateVisibility::Hidden);
     ASoulHUD* SoulHUD = Cast<ASoulHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
@@ -506,6 +764,39 @@ void UGraphicsSettings::OnShadingQualitySelectionChanged(FString SelectedItem, E
 
     FString Command = FString::Printf(TEXT("r.ShadingQuality %d"), QualityLevel);
     UKismetSystemLibrary::ExecuteConsoleCommand(this, Command, nullptr);
+}
+
+void UGraphicsSettings::OnPostProcessingSelectionChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
+{
+    UGameUserSettings* UserSettings = GEngine->GetGameUserSettings();
+    if (UserSettings)
+    {
+        int32 QualityLevel = 0;
+        if (SelectedItem == TEXT("Low"))
+        {
+            QualityLevel = 0;
+        }
+        else if (SelectedItem == TEXT("Medium"))
+        {
+            QualityLevel = 1;
+        }
+        else if (SelectedItem == TEXT("High"))
+        {
+            QualityLevel = 2;
+        }
+        else if (SelectedItem == TEXT("Epic"))
+        {
+            QualityLevel = 3;
+        }
+        else if (SelectedItem == TEXT("Cinematic"))
+        {
+            QualityLevel = 4;
+        }
+
+        UserSettings->SetPostProcessingQuality(QualityLevel);
+        UserSettings->ApplySettings(false);
+        UserSettings->SaveSettings();
+    }
 }
 
 void UGraphicsSettings::OnGlobalIlluminationSelectionChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
