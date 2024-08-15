@@ -199,6 +199,8 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 
 			bIsDie = true;
 			//die
+			StopAnimMontage();
+
 			Cast<USoulPlayerAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
 
 			APlayerController* PlayerController = Cast<APlayerController>(GetController());

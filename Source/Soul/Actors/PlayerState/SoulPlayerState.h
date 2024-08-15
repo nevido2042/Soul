@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+class UHealthComponent;
+
 UCLASS()
 class SOUL_API ASoulPlayerState : public APlayerState
 {

@@ -45,6 +45,14 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	if (HealthComponent)
 	{
 		HealthComponent->GetDamage(DamageAmount);
+
+		if (StunnedMontage)
+		{
+			GetCharacterMovement()->StopMovementImmediately();
+			StopAnimMontage();
+			PlayAnimMontage(StunnedMontage);
+		}
+
 	}
 	
 	if (UEnemyHealthBar* EnemyHPBar = Cast<UEnemyHealthBar>(HealthBarWidgetComponent->GetWidget()))
@@ -59,6 +67,9 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	if (HealthComponent->CurrentHealth <= 0.f)
 	{
 		//die
+
+		StopAnimMontage();
+
 		Cast<UEnemyAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
@@ -83,7 +94,11 @@ void AEnemy::HideHealthBar()
 
 void AEnemy::Attack()
 {
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) return;
+
 	if (AttackMontage == nullptr) return;
+
+	GetController()->StopMovement();
 
 	PlayAnimMontage(AttackMontage);
 }

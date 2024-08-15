@@ -41,6 +41,9 @@ protected:
 	UAnimMontage* AttackMontage;
 
 	UPROPERTY(EditAnywhere)
+	UAnimMontage* StunnedMontage;
+
+	UPROPERTY(EditAnywhere)
 	class UAudioComponent* AudioComponent;
 public:
 	void Attack();

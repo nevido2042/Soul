@@ -10,13 +10,13 @@ UHealthComponent::UHealthComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 	DefaultHealth = 100.0f;
+	CurrentHealth = DefaultHealth;
 	// ...
 }
 
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	CurrentHealth = DefaultHealth;
 }
 
 void UHealthComponent::GetDamage(float DamageAmount)

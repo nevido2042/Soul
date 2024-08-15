@@ -9,6 +9,7 @@
 #include "UI/GraphicsSettings.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "UI/YouDiedWidget.h"
+#include "Components/HealthComponent.h"
 
 void ASoulHUD::BeginPlay()
 {
@@ -57,8 +58,18 @@ void ASoulHUD::BeginPlay()
 
 void ASoulHUD::UpdateStatusWidget()
 {
-    float InHealth = PlayerState->GetHealthComponent()->CurrentHealth / PlayerState->GetHealthComponent()->DefaultHealth;
-    StatusWidget->SetHealthBar(InHealth);
+    // 1. 플레이어 상태에서 체력 컴포넌트를 가져옴
+    UHealthComponent* HealthComponent = PlayerState->GetHealthComponent();
+
+    // 2. 현재 체력과 기본 체력을 가져옴
+    float CurrentHealth = HealthComponent->CurrentHealth;
+    float DefaultHealth = HealthComponent->DefaultHealth;
+
+    // 3. 체력 비율을 계산함
+    float HealthRatio = CurrentHealth / DefaultHealth;
+
+    // 4. UI의 체력 바를 업데이트함
+    StatusWidget->SetHealthBar(HealthRatio);
 }
 
 void ASoulHUD::OpenAndClosePauseMenu()
