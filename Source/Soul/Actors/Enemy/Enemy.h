@@ -45,6 +45,10 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class UAudioComponent* AudioComponent;
+
+	UPROPERTY(EditAnywhere)
+	class USphereComponent* SphereComponent;
+
 public:
 	void Attack();
 

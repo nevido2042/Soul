@@ -40,9 +40,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UChildActorComponent* Weapon = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UTargetLockOnComponent* TargetLockOnComponent = nullptr;
+
 public:
 	USpringArmComponent* GetSpringArm() { return SpringArm; }
-
+	UCameraComponent* GetCamera() { return Camera; }
 	class ASword* GetSword();
 
 public:
@@ -54,6 +57,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetStrongAttack(bool Value) { bStrongAttack = Value; }
+
+	void TargetLockOn();
 
 private:
 	bool bRun = false;
@@ -99,4 +104,8 @@ protected:
 protected:
 	class ASoulPlayerState* SoulPlayerState;
 	class ASoulHUD* SoulHUD;
+
+protected:
+	void StopTargetLockOn();
+	void TriggerTargetLockOn();
 };

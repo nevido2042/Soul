@@ -14,6 +14,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Data/TraceData.h"
 #include "Components/AudioComponent.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -31,6 +32,9 @@ AEnemy::AEnemy()
 
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
 	AudioComponent->SetupAttachment(RootComponent);
+
+	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("LockOnPawn"));
+	SphereComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned

@@ -43,6 +43,7 @@ private:
     void PressStrongAttack();
     void ReleaseStrongAttack();
     void OpenPauseMenu();
+    void LockOn();
 
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

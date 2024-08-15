@@ -41,6 +41,7 @@ void ACharacterController::SetupInputComponent()
         EnhancedInputComponent->BindAction(StrongAttackAction, ETriggerEvent::Started, this, &ACharacterController::PressStrongAttack);
         EnhancedInputComponent->BindAction(StrongAttackAction, ETriggerEvent::Completed, this, &ACharacterController::ReleaseStrongAttack);
         EnhancedInputComponent->BindAction(PauseMenuAction, ETriggerEvent::Completed, this, &ACharacterController::OpenPauseMenu);
+        EnhancedInputComponent->BindAction(TargetLockOnAction, ETriggerEvent::Completed, this, &ACharacterController::LockOn);
 
 
     }
@@ -129,4 +130,9 @@ void ACharacterController::ReleaseStrongAttack()
 void ACharacterController::OpenPauseMenu()
 {
     Cast<ASoulHUD>(GetHUD())->OpenAndClosePauseMenu();
+}
+
+void ACharacterController::LockOn()
+{
+    Cast<APlayerCharacter>(GetPawn())->TargetLockOn();
 }

@@ -13,6 +13,7 @@
 #include "Actors/PlayerState/SoulPlayerState.h"
 #include "HUD/SoulHUD.h"
 #include "AnimInstances/SoulPlayerAnimInstance.h"
+#include "Components/TargetLockOnComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -28,6 +29,8 @@ APlayerCharacter::APlayerCharacter()
 
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(RootComponent);
+
+	TargetLockOnComponent = CreateDefaultSubobject<UTargetLockOnComponent>(TEXT("TargetLockOnComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -173,6 +176,21 @@ void APlayerCharacter::Jump()
 	Super::Jump();
 }
 
+void APlayerCharacter::TargetLockOn()
+{
+	UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
+	if (TargetLockOnComponent->GetIsLockOn())
+	{
+		UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
+		//StopTargetLockOn();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
+		TriggerTargetLockOn();
+	}
+}
+
 void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
 	--AttackIndex;
@@ -221,5 +239,15 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	}
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
+void APlayerCharacter::StopTargetLockOn()
+{
+	
+}
+
+void APlayerCharacter::TriggerTargetLockOn()
+{
+	TargetLockOnComponent->TriggerTargetLockOn();
 }
 
