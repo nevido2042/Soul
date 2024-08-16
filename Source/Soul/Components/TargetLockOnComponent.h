@@ -35,11 +35,16 @@ protected:
 public:
 	bool GetIsLockOn() { return bLockOn; }
 	void TriggerTargetLockOn();
+	void StopTargetLockOn();
 
 protected:
 	TArray<AActor*> TraceForTargets();
 	AActor* CheckforClosestTarget(TArray<AActor*> Actors);
+	float CheckHowCloseTargetIsToCenter(AActor* Actor);
 
-	
+	UFUNCTION()
+	void TargetLockOnEvent();
+	FRotator GetLockOnCameraRotation();
+	FTimerHandle TargetLockOnEventHandle;
 		
 };

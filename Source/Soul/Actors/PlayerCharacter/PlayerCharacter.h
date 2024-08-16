@@ -104,8 +104,4 @@ protected:
 protected:
 	class ASoulPlayerState* SoulPlayerState;
 	class ASoulHUD* SoulHUD;
-
-protected:
-	void StopTargetLockOn();
-	void TriggerTargetLockOn();
 };

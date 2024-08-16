@@ -6,6 +6,9 @@
 #include "Data/TraceData.h"
 #include "Actors/PlayerCharacter/PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values for this component's properties
 UTargetLockOnComponent::UTargetLockOnComponent()
@@ -15,7 +18,7 @@ UTargetLockOnComponent::UTargetLockOnComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 
     PlayerRef = Cast<APlayerCharacter>(GetOwner());
-    ensure(PlayerRef);
+    //ensure(PlayerRef);
 	// ...
 }
 
@@ -29,6 +32,76 @@ void UTargetLockOnComponent::BeginPlay()
 	
 }
 
+
+float UTargetLockOnComponent::CheckHowCloseTargetIsToCenter(AActor* Actor)
+{
+    FVector CameraForward = PlayerRef->GetCamera()->GetForwardVector();
+    FVector Start = PlayerRef->GetActorLocation();
+    FVector Target = Actor->GetActorLocation();
+    FRotator Rot = UKismetMathLibrary::FindLookAtRotation(Start, Target);
+    FVector Vec = Rot.Vector();
+    
+    return UKismetMathLibrary::Dot_VectorVector(CameraForward, Vec);
+}
+
+void UTargetLockOnComponent::TargetLockOnEvent()
+{
+    FVector PlayerLoc = PlayerRef->GetActorLocation();
+    FVector TargetLoc = TargetLockOn->GetActorLocation();
+
+    float Dist = FVector::Dist(PlayerLoc, TargetLoc);
+
+    if (Dist > LockOnRadius)
+    {
+        //StopTargetLockOn()
+    }
+    else
+    {
+        FRotator CurrentRotation = PlayerRef->GetController()->GetControlRotation();
+        FRotator TargetRotation = GetLockOnCameraRotation();
+
+        FRotator InterpRotation = UKismetMathLibrary::RInterpTo(
+            CurrentRotation, // 현재 회전
+            TargetRotation,  // 목표 회전
+            0.01f,       // 프레임 간의 시간(델타 타임)
+            10.f      // 보간 속도
+        );
+
+        FRotator NewRot = FRotator(InterpRotation.Pitch, InterpRotation.Yaw, CurrentRotation.Roll);
+
+        PlayerRef->GetController()->SetControlRotation(NewRot);
+    }
+}
+
+FRotator UTargetLockOnComponent::GetLockOnCameraRotation()
+{
+    FVector Start = PlayerRef->GetCamera()->GetComponentLocation();
+
+    FVector PlayerLoc = PlayerRef->GetActorLocation();
+    FVector TargetLoc = TargetLockOn->GetActorLocation();
+
+    float Dist = FVector::Dist(PlayerLoc, TargetLoc);
+
+    FVector Target(TargetLoc.X, TargetLoc.Y, TargetLoc.Z - Dist / 2);
+
+    return UKismetMathLibrary::FindLookAtRotation(Start, Target);
+}
+
+void UTargetLockOnComponent::StopTargetLockOn()
+{
+    TargetLockOn = nullptr;
+
+    APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+    PlayerController->SetIgnoreLookInput(false);
+
+    bLockOn = false;
+
+    UCharacterMovementComponent* CharacterMovementComponent = PlayerRef->GetCharacterMovement();
+    CharacterMovementComponent->bOrientRotationToMovement = true;
+    CharacterMovementComponent->bUseControllerDesiredRotation = false;
+
+    GetWorld()->GetTimerManager().ClearTimer(TargetLockOnEventHandle);
+}
 
 TArray<AActor*> UTargetLockOnComponent::TraceForTargets()
 {
@@ -74,45 +147,70 @@ TArray<AActor*> UTargetLockOnComponent::TraceForTargets()
 
 AActor* UTargetLockOnComponent::CheckforClosestTarget(TArray<AActor*> Actors)
 {
-    //// 트레이스의 시작점과 끝점을 설정합니다.
-    //FVector Start = PlayerRef->GetCamera()->GetComponentLocation();
-    //FVector End = Start + (GetActorForwardVector() * 1000.0f); // 1000.0f 만큼 전방으로 트레이스
+    float CompareFloat = 0.f;
+    AActor* TempTargetLockOn = nullptr;
 
-    //// 트레이스의 충돌 파라미터 설정
-    //FHitResult HitResult;
-    //FCollisionQueryParams CollisionParams;
-    //CollisionParams.AddIgnoredActor(this); // 자기 자신을 무시하도록 설정
+    for (AActor* Actor : Actors)
+    {
+        // 트레이스의 시작점과 끝점을 설정합니다.
+        FVector Start = PlayerRef->GetCamera()->GetComponentLocation();
+        FVector End = Actor->GetActorLocation();
 
-    //// 라인 트레이스를 수행
-    //bool bHit = GetWorld()->LineTraceSingleByChannel(
-    //    HitResult,
-    //    Start,
-    //    End,
-    //    ECC_Visibility,  // 사용하려는 트레이스 채널 (예: ECC_Visibility)
-    //    CollisionParams
-    //);
+        // 트레이스의 충돌 파라미터 설정
+        FHitResult HitResult;
+        FCollisionQueryParams CollisionParams;
+        CollisionParams.AddIgnoredActor(PlayerRef); // 자기 자신을 무시하도록 설정
 
-    //// 트레이스 결과를 처리
-    //if (bHit)
-    //{
-    //    // HitResult에 충돌한 정보가 들어 있습니다.
-    //    UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *HitResult.Actor->GetName());
+        // 라인 트레이스를 수행
+        bool bHit = GetWorld()->LineTraceSingleByChannel(
+            HitResult,
+            Start,
+            End,
+            ECC_Visibility,  // 사용하려는 트레이스 채널 (예: ECC_Visibility)
+            CollisionParams
+        );
 
-    //    // 충돌 위치에 빨간색 디버그 선을 그립니다.
-    //    DrawDebugLine(GetWorld(), Start, HitResult.Location, FColor::Red, false, 5.0f, 0, 1.0f);
-    //}
-    //else
-    //{
-    //    // 충돌이 발생하지 않은 경우 파란색 디버그 선을 그립니다.
-    //    DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 5.0f, 0, 1.0f);
-    //}
+        // 트레이스 결과를 처리
+        if (bHit)
+        {
+            // 충돌 위치에 빨간색 디버그 선을 그립니다.
+            DrawDebugLine(GetWorld(), Start, HitResult.Location, FColor::Red, false, 5.0f, 0, 1.0f);
+        }
+        else
+        {
+            // 충돌이 발생하지 않은 경우 파란색 디버그 선을 그립니다.
+            DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 5.0f, 0, 1.0f);
 
-    //return nullptr;
+            float CheckFloat = CheckHowCloseTargetIsToCenter(Actor);
+
+            if (CompareFloat < CheckFloat)
+            {
+                CompareFloat = CheckFloat;
+                TempTargetLockOn = Actor;
+            }
+        }
+    }
+
+    return TempTargetLockOn;
 }
 
 void UTargetLockOnComponent::TriggerTargetLockOn()
 {
     TArray<AActor*> Actors = TraceForTargets();
-    CheckforClosestTarget(Actors);
+    AActor* Actor = CheckforClosestTarget(Actors);
+    if (Actor)
+    {
+        TargetLockOn = Actor;
+        APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+        PlayerController->SetIgnoreLookInput(true);
+        bLockOn = true;
+
+        UCharacterMovementComponent* CharacterMovementComponent = PlayerRef->GetCharacterMovement();
+        CharacterMovementComponent->bOrientRotationToMovement = false;
+        CharacterMovementComponent->bUseControllerDesiredRotation = true;
+
+        GetWorld()->GetTimerManager().SetTimer(TargetLockOnEventHandle, FTimerDelegate::CreateUObject(this, &UTargetLockOnComponent::TargetLockOnEvent), GetWorld()->DeltaTimeSeconds, true);
+
+    }
 }
 

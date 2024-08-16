@@ -182,12 +182,12 @@ void APlayerCharacter::TargetLockOn()
 	if (TargetLockOnComponent->GetIsLockOn())
 	{
 		UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
-		//StopTargetLockOn();
+		TargetLockOnComponent->StopTargetLockOn();
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
-		TriggerTargetLockOn();
+		TargetLockOnComponent->TriggerTargetLockOn();
 	}
 }
 
@@ -239,15 +239,5 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	}
 
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-}
-
-void APlayerCharacter::StopTargetLockOn()
-{
-	
-}
-
-void APlayerCharacter::TriggerTargetLockOn()
-{
-	TargetLockOnComponent->TriggerTargetLockOn();
 }
 
