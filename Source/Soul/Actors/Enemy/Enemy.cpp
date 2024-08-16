@@ -33,8 +33,8 @@ AEnemy::AEnemy()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
 	AudioComponent->SetupAttachment(RootComponent);
 
-	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("LockOnPawn"));
-	SphereComponent->SetupAttachment(RootComponent);
+	LockOnTarget = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	LockOnTarget->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -70,7 +70,9 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 
 	if (HealthComponent->CurrentHealth <= 0.f)
 	{
+		if (bIsDie) return DamageAmount;
 		//die
+		bIsDie = true;
 
 		StopAnimMontage();
 
@@ -86,9 +88,12 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 		{
 			AIController->BrainComponent->StopLogic("Death");
 		}
+
+		LockOnTarget->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 
-	return 0.0f;
+	return DamageAmount;
+
 }
 
 void AEnemy::HideHealthBar()

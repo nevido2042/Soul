@@ -29,9 +29,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	UWidgetComponent* HealthBarWidgetComponent;
 
+protected:
+	bool bIsDie = false;
+	
 public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
+	bool GetIsDie() { return bIsDie; }
 private:
 	UFUNCTION()
 	void HideHealthBar();
@@ -47,7 +50,7 @@ protected:
 	class UAudioComponent* AudioComponent;
 
 	UPROPERTY(EditAnywhere)
-	class USphereComponent* SphereComponent;
+	class USphereComponent* LockOnTarget;
 
 public:
 	void Attack();

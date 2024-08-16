@@ -47,6 +47,7 @@ public:
 	USpringArmComponent* GetSpringArm() { return SpringArm; }
 	UCameraComponent* GetCamera() { return Camera; }
 	class ASword* GetSword();
+	class UTargetLockOnComponent* GetTargetLockOnComponent() { return TargetLockOnComponent; }
 
 public:
 	void Attack();

@@ -9,6 +9,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Actors/Enemy/Enemy.h"
 
 // Sets default values for this component's properties
 UTargetLockOnComponent::UTargetLockOnComponent()
@@ -46,6 +47,12 @@ float UTargetLockOnComponent::CheckHowCloseTargetIsToCenter(AActor* Actor)
 
 void UTargetLockOnComponent::TargetLockOnEvent()
 {
+    if (Cast<AEnemy>(TargetLockOn)->GetIsDie())
+    {
+        StopTargetLockOn();
+        return;
+    }
+
     FVector PlayerLoc = PlayerRef->GetActorLocation();
     FVector TargetLoc = TargetLockOn->GetActorLocation();
 
@@ -53,7 +60,8 @@ void UTargetLockOnComponent::TargetLockOnEvent()
 
     if (Dist > LockOnRadius)
     {
-        //StopTargetLockOn()
+        StopTargetLockOn();
+        return;
     }
     else
     {
@@ -82,7 +90,7 @@ FRotator UTargetLockOnComponent::GetLockOnCameraRotation()
 
     float Dist = FVector::Dist(PlayerLoc, TargetLoc);
 
-    FVector Target(TargetLoc.X, TargetLoc.Y, TargetLoc.Z - Dist / 2);
+    FVector Target(TargetLoc.X, TargetLoc.Y, TargetLoc.Z - Dist / LockOnPitch);
 
     return UKismetMathLibrary::FindLookAtRotation(Start, Target);
 }
@@ -113,6 +121,7 @@ TArray<AActor*> UTargetLockOnComponent::TraceForTargets()
 
     // 트레이스가 영향을 받지 않을 액터를 설정합니다.
     TArray<AActor*> IgnoreActors;
+    IgnoreActors.Add(PlayerRef);
 
     // 트레이스 결과를 저장할 배열을 생성합니다.
     TArray<FHitResult> HitResults;

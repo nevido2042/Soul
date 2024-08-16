@@ -38,6 +38,9 @@ public:
 	void StopTargetLockOn();
 
 protected:
+	UPROPERTY(EditAnywhere)
+	float LockOnPitch = 4.f;
+
 	TArray<AActor*> TraceForTargets();
 	AActor* CheckforClosestTarget(TArray<AActor*> Actors);
 	float CheckHowCloseTargetIsToCenter(AActor* Actor);
