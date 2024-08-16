@@ -52,6 +52,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class USphereComponent* LockOnTarget;
 
+	UPROPERTY(EditAnywhere)
+	class UWidgetComponent* LockOnWidgetComponent;
+
+public:
+	void HideLockOnWidget(bool InBool);
 public:
 	void Attack();
 

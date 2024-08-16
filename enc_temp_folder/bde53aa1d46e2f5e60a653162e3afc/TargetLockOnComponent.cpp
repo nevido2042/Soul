@@ -97,7 +97,7 @@ FRotator UTargetLockOnComponent::GetLockOnCameraRotation()
 
 void UTargetLockOnComponent::StopTargetLockOn()
 {
-    Cast<AEnemy>(TargetLockOn)->HideLockOnWidget(true);
+    Cast<AEnemy>(TargetLockOn)->HideLockOnWidget(false);
 
     TargetLockOn = nullptr;
 

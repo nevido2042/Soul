@@ -35,6 +35,9 @@ AEnemy::AEnemy()
 
 	LockOnTarget = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	LockOnTarget->SetupAttachment(RootComponent);
+
+	LockOnWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("LockOnWidgetComponent"));
+	LockOnWidgetComponent->SetupAttachment(LockOnTarget);
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +45,7 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
+	HideLockOnWidget(true);
 }
 
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -99,6 +103,11 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 void AEnemy::HideHealthBar()
 {
 	HealthBarWidgetComponent->SetVisibility(false);
+}
+
+void AEnemy::HideLockOnWidget(bool InBool)
+{
+	LockOnWidgetComponent->SetHiddenInGame(InBool);
 }
 
 void AEnemy::Attack()
