@@ -4,6 +4,8 @@
 #include "Actors/Enemy/Tasks/AttackTask.h"
 #include "AIController.h"
 #include "Actors/Enemy/Enemy.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 UAttackTask::UAttackTask()
 {
@@ -18,6 +20,17 @@ EBTNodeResult::Type UAttackTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
     if (ControlledPawn)
     {
         UE_LOG(LogTemp, Warning, TEXT("Attack!"));
+
+        UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
+        AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(TEXT("TargetActor")));
+
+        // Calculate the rotation to look at the target actor
+        FVector TargetLocation = TargetActor->GetActorLocation();
+        FVector AICharacterLocation = AIController->GetPawn()->GetActorLocation();
+        FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(AICharacterLocation, TargetLocation);
+
+        // Set the AI character's rotation to look at the target actor
+        AIController->GetPawn()->SetActorRotation(LookAtRotation);
 
         AEnemy* Enemy = Cast<AEnemy>(ControlledPawn);
         if (Enemy)

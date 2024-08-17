@@ -4,7 +4,6 @@
 #include "Actors/Enemy/Tasks/MoveToTargetActorTask.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Kismet/KismetMathLibrary.h"
 
 UMoveToTargetActorTask::UMoveToTargetActorTask()
 {
@@ -27,14 +26,6 @@ EBTNodeResult::Type UMoveToTargetActorTask::ExecuteTask(UBehaviorTreeComponent& 
     }
 
     AIController->MoveToActor(TargetActor);
-
-    // Calculate the rotation to look at the target actor
-    FVector TargetLocation = TargetActor->GetActorLocation();
-    FVector AICharacterLocation = AIController->GetPawn()->GetActorLocation();
-    FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(AICharacterLocation, TargetLocation);
-
-    // Set the AI character's rotation to look at the target actor
-    AIController->GetPawn()->SetActorRotation(LookAtRotation);
 
     return EBTNodeResult::Succeeded;
 }
