@@ -16,7 +16,6 @@
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Particles/ParticleSystemComponent.h"
-#include "Components/AudioComponent.h"
 #include "Perception/AISense_Damage.h"
 
 // Sets default values
@@ -33,10 +32,6 @@ AEnemy::AEnemy()
 	HealthBarWidgetComponent->SetDrawSize(FVector2D(200.0f, 50.0f));
 	HealthBarWidgetComponent->SetVisibility(false);
 
-	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
-	AudioComponent->SetupAttachment(RootComponent);
-	AudioComponent->SetAutoActivate(false);
-
 	LockOnTarget = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	LockOnTarget->SetupAttachment(RootComponent);
 
@@ -46,6 +41,10 @@ AEnemy::AEnemy()
 	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
 	ParticleSystem->SetupAttachment(RootComponent);
 	ParticleSystem->SetAutoActivate(false);
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->SetAutoActivate(false);
 }
 
 // Called when the game starts or when spawned
@@ -188,7 +187,6 @@ void AEnemy::HitDetect()
 	{
 		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 10.f, nullptr, nullptr, nullptr);
 		IgnoreActors.Add(HitResult.GetActor());
-		AudioComponent->Play();
 	}
 }
 

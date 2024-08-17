@@ -26,6 +26,11 @@ AEnemyController::AEnemyController()
 
 void AEnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
+    if (AController* Controller = Cast<AController>(Actor))
+    {
+        Actor = Controller->GetPawn();
+    }
+
     if (UBlackboardComponent* BlackboardComp = GetBlackboardComponent())
     {
         BlackboardComp->SetValueAsObject(TEXT("TargetActor"), Actor);
@@ -57,9 +62,8 @@ ETeamAttitude::Type AEnemyController::GetTeamAttitudeTowards(const AActor& Other
             }
         }
     }
-
     //pawn으로 들어올 때
-    if (const APawn* OtherPawn = Cast<APawn>(&Other))
+    else if (const APawn* OtherPawn = Cast<APawn>(&Other))
     {
         if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController()))
         {

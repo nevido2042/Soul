@@ -14,6 +14,8 @@
 #include "HUD/SoulHUD.h"
 #include "AnimInstances/SoulPlayerAnimInstance.h"
 #include "Components/TargetLockOnComponent.h"
+#include "Components/AudioComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -31,6 +33,14 @@ APlayerCharacter::APlayerCharacter()
 	Weapon->SetupAttachment(RootComponent);
 
 	TargetLockOnComponent = CreateDefaultSubobject<UTargetLockOnComponent>(TEXT("TargetLockOnComponent"));
+
+	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
+	ParticleSystem->SetupAttachment(RootComponent);
+	ParticleSystem->SetAutoActivate(false);
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->SetAutoActivate(false);
 }
 
 // Called when the game starts or when spawned
@@ -274,6 +284,15 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	if (SoulPlayerState)
 	{
 		SoulPlayerState->GetHealthComponent()->GetDamage(DamageAmount);
+
+		ParticleSystem->ActivateSystem();
+		AudioComponent->Play();
+
+		GetCharacterMovement()->DisableMovement();
+		float MontageDuration = ImpactMontage->GetPlayLength();
+		PlayAnimMontage(ImpactMontage);
+		GetWorld()->GetTimerManager().SetTimer(HardLandingTimerHandle, this, &APlayerCharacter::ResetMovementMode, MontageDuration, false);
+
 		if (SoulPlayerState->GetHealthComponent()->CurrentHealth <= 0.f)
 		{
 			if (bIsDie)

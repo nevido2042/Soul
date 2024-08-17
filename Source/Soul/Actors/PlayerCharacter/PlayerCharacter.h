@@ -42,6 +42,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UTargetLockOnComponent* TargetLockOnComponent = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	class UAudioComponent* AudioComponent;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystemComponent* ParticleSystem;
+
 public:
 	USpringArmComponent* GetSpringArm() { return SpringArm; }
 	UCameraComponent* GetCamera() { return Camera; }
@@ -117,6 +123,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* HardLandingMontage = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* ImpactMontage = nullptr;
 
 	UFUNCTION()
 	void OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);

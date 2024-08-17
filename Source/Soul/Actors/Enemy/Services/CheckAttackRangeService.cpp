@@ -23,7 +23,7 @@ void UCheckAttackRangeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
     if (TargetActor && ControlledPawn)
     {
-        float AttackRange = /*BlackboardComp->GetValueAsFloat("AttackRange");*/200.f;
+        float AttackRange = /*BlackboardComp->GetValueAsFloat("AttackRange");*/100.f;
         bool bIsInRange = IsTargetInRange(TargetActor, ControlledPawn, AttackRange);
         BlackboardComp->SetValueAsBool("bIsTargetInRange", bIsInRange);
     }
