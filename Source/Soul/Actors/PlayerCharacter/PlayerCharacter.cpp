@@ -176,6 +176,11 @@ void APlayerCharacter::Attack()
 			return;
 		}
 
+		/*if (SoulPlayerState->GetStaminaComponent()->CurrentStamina < 0.1f)
+		{
+			return;
+		}*/
+
 		SetAttackDamage(20.f);
 
 		PlayAnimMontage(StrongAttackMontage);
@@ -186,6 +191,11 @@ void APlayerCharacter::Attack()
 		{
 			return;
 		}
+
+		/*if (SoulPlayerState->GetStaminaComponent()->CurrentStamina < 0.1f)
+		{
+			return;
+		}*/
 
 		SetAttackDamage(10.f);
 
@@ -206,6 +216,12 @@ void APlayerCharacter::RollOrDodge()
 	{
 		return;
 	}
+
+	if (TryActionUseStamina(20.f) == false)
+	{
+		return;
+	}
+	
 
 	if (GetLastMovementInputVector().Rotation() == FRotator::ZeroRotator)
 	{
@@ -302,6 +318,13 @@ void APlayerCharacter::ResetMovementMode()
 
 void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
+	//if (TryActionUseStamina(20.f) == false)
+	//{
+	//	GetMesh()->GetAnimInstance()->Montage_Stop(0.35f);
+	//	AttackIndex = 0;
+	//	return;
+	//}
+
 	--AttackIndex;
 
 	if (AttackIndex < 0)
@@ -411,12 +434,12 @@ bool APlayerCharacter::TryActionUseStamina(float InCost)
 	SoulPlayerState->GetStaminaComponent()->DecreaseStamina(InCost);
 	SoulHUD->UpdateStatusWidget();
 
-	// 1초 뒤에 DelayedRefreshStamina 함수를 실행합니다.
+	// 2초 뒤에 StartRegenStamina 함수를 실행합니다.
 	GetWorld()->GetTimerManager().SetTimer(
 		StartRegenStaminaHandle, // FTimerHandle 변수
 		this, // 호출할 객체
 		&APlayerCharacter::StartRegenStamina, // 호출할 함수
-		1.0f, // 지연 시간 (초)
+		2.0f, // 지연 시간 (초)
 		false // 반복 여부 (false로 설정하여 한 번만 호출)
 	);
 

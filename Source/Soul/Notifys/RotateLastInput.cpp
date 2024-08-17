@@ -17,6 +17,13 @@ void URotateLastInput::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 			if (PlayerCharacter->GetTargetLockOnComponent()->GetIsLockOn()) return;
 
 			FVector NewVector = PlayerCharacter->GetLastMovementInputVector();
+
+			// 입력이 없으면 OwnerActor의 Forward Vector를 사용
+			if (NewVector.IsNearlyZero())
+			{
+				NewVector = OwnerActor->GetActorForwardVector();
+			}
+
 			PlayerCharacter->SetActorRotation(NewVector.ToOrientationQuat());
 		}
 	}

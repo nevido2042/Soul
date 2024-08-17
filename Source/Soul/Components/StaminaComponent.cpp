@@ -23,15 +23,6 @@ void UStaminaComponent::BeginPlay()
 	
 }
 
-
-// Called every frame
-//void UStaminaComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-//{
-//	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-//
-//	// ...
-//}
-
 void UStaminaComponent::DecreaseStamina(float InAmount)
 {
 	float Result = CurrentStamina - InAmount;

@@ -171,5 +171,6 @@ protected:
 	UFUNCTION()
 	void StartRegenStamina();
 
+public:
 	bool TryActionUseStamina(float InCost);
 };
