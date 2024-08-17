@@ -26,10 +26,6 @@ protected:
 	// Movement mode change handler
 	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -66,8 +62,23 @@ public:
 
 	float GetAttackDamage() { return AttackDmage; }
 	void SetAttackDamage(float InValue) { AttackDmage = InValue; }
-private:
-	bool bRun = false;
+protected:
+	// Function to smoothly transition speed
+	void SmoothTransitionSpeed(float TargetSpeed, float DeltaTime);
+
+	// Run speed value
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	float RunSpeed = 600.f;
+
+	// Jog speed value
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	float JogSpeed = 300.f;
+
+	// Boolean flag to determine if the character is running
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+	bool bRun;
+
+protected:
 
 	bool bStrongAttack = false;
 
@@ -87,13 +98,6 @@ protected:
 	void ResetMovementMode();
 
 protected:
-
-	UPROPERTY(EditAnywhere)
-	float RunSpeed = 600.f;
-
-	UPROPERTY(EditAnywhere)
-	float JogSpeed = 300.f;
-
 	int AttackIndex = 0;
 
 	UPROPERTY(EditAnywhere)

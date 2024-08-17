@@ -19,7 +19,7 @@
 APlayerCharacter::APlayerCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -112,18 +112,6 @@ void APlayerCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uin
 	}
 }
 
-// Called every frame
-void APlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (bRun == false)
-	{
-		Jog();
-	}
-
-}
-
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -207,21 +195,22 @@ void APlayerCharacter::RollOrDodge()
 
 void APlayerCharacter::Run()
 {
-	bRun = true;
-	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	float Scale = 3.f;
-	CurrentSpeed = FMathf::Lerp(CurrentSpeed, RunSpeed, GetWorld()->DeltaTimeSeconds * Scale);
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Run"));
+	if (!bRun) // 상태가 이미 Run 상태인 경우, 속도 조절을 방지
+	{
+		bRun = true;
+		// Set speed directly when changing to running
+		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	}
 }
 
 void APlayerCharacter::Jog()
 {
-	bRun = false;
-	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
-	float Scale = 3.f;
-	CurrentSpeed = FMathf::Lerp(CurrentSpeed, JogSpeed, GetWorld()->DeltaTimeSeconds * Scale);
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Walk"));
-
+	if (bRun) // 상태가 이미 Jog 상태인 경우, 속도 조절을 방지
+	{
+		bRun = false;
+		// Set speed directly when changing to jogging
+		GetCharacterMovement()->MaxWalkSpeed = JogSpeed;
+	}
 }
 
 void APlayerCharacter::Jump()
@@ -247,6 +236,13 @@ void APlayerCharacter::TargetLockOn()
 		UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
 		TargetLockOnComponent->TriggerTargetLockOn();
 	}
+}
+
+void APlayerCharacter::SmoothTransitionSpeed(float TargetSpeed, float DeltaTime)
+{
+	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	float Scale = 3.f; // Adjust speed transition rate here
+	CurrentSpeed = FMath::Lerp(CurrentSpeed, TargetSpeed, DeltaTime * Scale);
 }
 
 void APlayerCharacter::RetryMovementModeChange()
