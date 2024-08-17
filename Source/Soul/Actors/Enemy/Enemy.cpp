@@ -57,6 +57,8 @@ void AEnemy::BeginPlay()
 
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	if (bIsDie) return DamageAmount;
+
 	if (HealthComponent)
 	{
 		HealthComponent->GetDamage(DamageAmount);
@@ -89,7 +91,6 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 
 	if (HealthComponent->CurrentHealth <= 0.f)
 	{
-		if (bIsDie) return DamageAmount;
 		//die
 		bIsDie = true;
 
@@ -185,7 +186,7 @@ void AEnemy::HitDetect()
 
 	if (bHit)
 	{
-		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 10.f, nullptr, nullptr, nullptr);
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 40.f, nullptr, nullptr, nullptr);
 		IgnoreActors.Add(HitResult.GetActor());
 	}
 }

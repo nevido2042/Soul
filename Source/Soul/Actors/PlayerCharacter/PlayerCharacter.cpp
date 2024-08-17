@@ -283,6 +283,10 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 
 	if (SoulPlayerState)
 	{
+		if (bIsDie)
+		{
+			return DamageAmount;
+		}
 		SoulPlayerState->GetHealthComponent()->GetDamage(DamageAmount);
 
 		ParticleSystem->ActivateSystem();
@@ -295,11 +299,6 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 
 		if (SoulPlayerState->GetHealthComponent()->CurrentHealth <= 0.f)
 		{
-			if (bIsDie)
-			{
-				return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-			}
-
 			bIsDie = true;
 			//die
 			StopAnimMontage();
@@ -323,6 +322,6 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		SoulHUD->UpdateStatusWidget();
 	}
 
-	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	return DamageAmount;
 }
 
