@@ -239,19 +239,6 @@ void APlayerCharacter::RollOrDodge()
 
 void APlayerCharacter::Run()
 {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) return;
-
-	if (GetCharacterMovement()->MovementMode != EMovementMode::MOVE_Walking) return;
-
-	if (bRun)
-	{
-		if (TryActionUseStamina(0.1f) == false)
-		{
-			Jog();
-			return;
-		}
-	}
-
 	if (!bRun) // 상태가 이미 Run 상태인 경우, 속도 조절을 방지
 	{
 		bRun = true;
@@ -438,7 +425,7 @@ void APlayerCharacter::HandleTimelineFinished()
 
 bool APlayerCharacter::TryActionUseStamina(float InCost)
 {
-	if (SoulPlayerState->GetStaminaComponent()->CurrentStamina < 3.f) //0.f으로 하면 안걸린다 ㅋㅋ
+	if (SoulPlayerState->GetStaminaComponent()->CurrentStamina < 0.1f) //0.f으로 하면 안걸린다 ㅋㅋ
 	{
 		return false;
 	}
