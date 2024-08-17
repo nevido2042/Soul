@@ -107,24 +107,18 @@ AActor* UTargetLockOnComponent::GetTargetOnLeft()
         FVector Start = PlayerRef->GetCamera()->GetComponentLocation();
         FVector End = Target->GetActorLocation();
 
-        // 트레이스할 객체 유형 설정 (예: 월드 정적 메쉬)
-        TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-        ObjectTypes.Add(LockOnPawn);
-
-        // 트레이스 결과를 저장할 변수
+        // 트레이스의 충돌 파라미터 설정
         FHitResult HitResult;
+        FCollisionQueryParams CollisionParams;
+        CollisionParams.AddIgnoredActor(PlayerRef); // 자기 자신을 무시하도록 설정
 
-        // 트레이스 파라미터 설정
-        FCollisionQueryParams Params;
-        Params.AddIgnoredActor(PlayerRef);  // 자기 자신을 무시
-
-        // 라인 트레이스 실행
-        bool bHit = GetWorld()->LineTraceSingleByObjectType(
-            HitResult,         // 결과 저장 변수
-            Start,             // 시작 지점
-            End,               // 끝 지점
-            ObjectTypes,  // 객체 유형
-            Params             // 추가 파라미터
+        // 라인 트레이스를 수행
+        bool bHit = GetWorld()->LineTraceSingleByChannel(
+            HitResult,
+            Start,
+            End,
+            ECC_Visibility,  // 사용하려는 트레이스 채널 (예: ECC_Visibility)
+            CollisionParams
         );
 
         // 트레이스 결과 확인
@@ -146,9 +140,6 @@ AActor* UTargetLockOnComponent::GetTargetOnLeft()
                 {
                     CompareFloat = CheckFloat;
                     TempTargetLockOn = Target;
-
-                    Cast<AEnemy>(TempTargetLockOn)->HideLockOnWidget(false);
-                    Cast<AEnemy>(TargetLockOn)->HideLockOnWidget(true);
                 }
             }
         }
@@ -158,77 +149,13 @@ AActor* UTargetLockOnComponent::GetTargetOnLeft()
             UE_LOG(LogTemp, Warning, TEXT("No hit detected."));
         }
 
-        DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5.0f, 0, 2.0f);
     }
     return TempTargetLockOn;
 }
 
 AActor* UTargetLockOnComponent::GetTargetOnRight()
 {
-    float CompareFloat = 0.f;
-    AActor* TempTargetLockOn = nullptr;
-
-    TArray<AActor*> Targets = TraceForTargets();
-    for (AActor* Target : Targets)
-    {
-        // 트레이스의 시작점과 끝점을 설정합니다.
-        FVector Start = PlayerRef->GetCamera()->GetComponentLocation();
-        FVector End = Target->GetActorLocation();
-
-        // 트레이스할 객체 유형 설정 (예: 월드 정적 메쉬)
-        TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-        ObjectTypes.Add(LockOnPawn);
-
-        // 트레이스 결과를 저장할 변수
-        FHitResult HitResult;
-
-        // 트레이스 파라미터 설정
-        FCollisionQueryParams Params;
-        Params.AddIgnoredActor(PlayerRef);  // 자기 자신을 무시
-
-        // 라인 트레이스 실행
-        bool bHit = GetWorld()->LineTraceSingleByObjectType(
-            HitResult,         // 결과 저장 변수
-            Start,             // 시작 지점
-            End,               // 끝 지점
-            ObjectTypes,  // 객체 유형
-            Params             // 추가 파라미터
-        );
-
-        // 트레이스 결과 확인
-        if (bHit)
-        {
-            // 충돌 지점에 디버그 구를 그려서 시각적으로 확인 (선택 사항)
-            DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 20.0f, 12, FColor::Red, false, 5.0f);
-
-            FVector CameraRightVector = PlayerRef->GetCamera()->GetRightVector();
-
-            double Dot = UKismetMathLibrary::Dot_VectorVector(CameraRightVector, HitResult.Normal);
-            double ASINd = UKismetMathLibrary::DegAsin(Dot);
-
-            if (TargetLockOn != Target && ASINd < 0.f)
-            {
-                float CheckFloat = CheckHowCloseTargetIsToCenter(Target);
-
-                if (CompareFloat < CheckFloat)
-                {
-                    CompareFloat = CheckFloat;
-                    TempTargetLockOn = Target;
-
-                    Cast<AEnemy>(TempTargetLockOn)->HideLockOnWidget(false);
-                    Cast<AEnemy>(TargetLockOn)->HideLockOnWidget(true);
-                }
-            }
-        }
-        else
-        {
-            // 트레이스가 실패한 경우
-            UE_LOG(LogTemp, Warning, TEXT("No hit detected."));
-        }
-
-        DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5.0f, 0, 2.0f);
-    }
-    return TempTargetLockOn;
+    return nullptr;
 }
 
 void UTargetLockOnComponent::StopTargetLockOn()

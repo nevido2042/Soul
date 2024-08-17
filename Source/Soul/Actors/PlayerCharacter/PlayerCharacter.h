@@ -68,6 +68,10 @@ public:
 
 	float GetAttackDamage() { return AttackDmage; }
 	void SetAttackDamage(float InValue) { AttackDmage = InValue; }
+
+	void SwitchTargetOnLeft();
+	void SwitchTargetOnRight();
+
 protected:
 	// Function to smoothly transition speed
 	void SmoothTransitionSpeed(float TargetSpeed, float DeltaTime);

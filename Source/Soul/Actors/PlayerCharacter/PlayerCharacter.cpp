@@ -248,6 +248,16 @@ void APlayerCharacter::TargetLockOn()
 	}
 }
 
+void APlayerCharacter::SwitchTargetOnLeft()
+{
+	TargetLockOnComponent->SwitchTargetOnLeft();
+}
+
+void APlayerCharacter::SwitchTargetOnRight()
+{
+	TargetLockOnComponent->SwitchTargetOnRight();
+}
+
 void APlayerCharacter::SmoothTransitionSpeed(float TargetSpeed, float DeltaTime)
 {
 	float& CurrentSpeed = GetCharacterMovement()->MaxWalkSpeed;

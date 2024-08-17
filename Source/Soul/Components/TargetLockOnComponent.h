@@ -36,6 +36,8 @@ public:
 	bool GetIsLockOn() { return bLockOn; }
 	void TriggerTargetLockOn();
 	void StopTargetLockOn();
+	void SwitchTargetOnLeft();
+	void SwitchTargetOnRight();
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -49,5 +51,8 @@ protected:
 	void TargetLockOnEvent();
 	FRotator GetLockOnCameraRotation();
 	FTimerHandle TargetLockOnEventHandle;
-		
+
+	AActor* GetTargetOnLeft();
+	AActor* GetTargetOnRight();
+
 };

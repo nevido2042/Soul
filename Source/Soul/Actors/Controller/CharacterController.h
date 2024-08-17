@@ -44,6 +44,9 @@ private:
     void ReleaseStrongAttack();
     void OpenPauseMenu();
     void LockOn();
+    void SwitchTargetOnLeft();
+    void SwitchTargetOnRight();
+    //void SwitchTarget(const FInputActionValue& Value);
 
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -81,6 +84,15 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     UInputAction* PauseMenuAction;
+
+    //UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    //UInputAction* SwitchTargetAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* SwitchTargetOnLeftAction;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    UInputAction* SwitchTargetOnRightAction;
 
 protected:
     UPROPERTY(EditAnywhere)

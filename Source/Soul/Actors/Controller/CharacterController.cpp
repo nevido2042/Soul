@@ -42,7 +42,9 @@ void ACharacterController::SetupInputComponent()
         EnhancedInputComponent->BindAction(StrongAttackAction, ETriggerEvent::Completed, this, &ACharacterController::ReleaseStrongAttack);
         EnhancedInputComponent->BindAction(PauseMenuAction, ETriggerEvent::Completed, this, &ACharacterController::OpenPauseMenu);
         EnhancedInputComponent->BindAction(TargetLockOnAction, ETriggerEvent::Completed, this, &ACharacterController::LockOn);
-
+        EnhancedInputComponent->BindAction(SwitchTargetOnLeftAction, ETriggerEvent::Completed, this, &ACharacterController::SwitchTargetOnLeft);
+        EnhancedInputComponent->BindAction(SwitchTargetOnRightAction, ETriggerEvent::Completed, this, &ACharacterController::SwitchTargetOnRight);
+        //EnhancedInputComponent->BindAction(SwitchTargetAction, ETriggerEvent::Completed, this, &ACharacterController::SwitchTarget);
 
     }
 }
@@ -135,4 +137,37 @@ void ACharacterController::OpenPauseMenu()
 void ACharacterController::LockOn()
 {
     Cast<APlayerCharacter>(GetPawn())->TargetLockOn();
+}
+
+//void ACharacterController::SwitchTarget(const FInputActionValue& Value)
+//{
+//    float WheelDelta = Value.Get<float>();
+//
+//    // Check the direction of the wheel movement
+//    if (WheelDelta > 0.0f)
+//    {
+//        UE_LOG(LogTemp, Warning, TEXT("%f"), WheelDelta);
+//        // Wheel was moved up
+//        //SwitchToNextTarget();
+//    }
+//    else if (WheelDelta < 0.0f)
+//    {
+//        UE_LOG(LogTemp, Warning, TEXT("%f"), WheelDelta);
+//        // Wheel was moved down
+//        //SwitchToPreviousTarget();
+//    }
+//
+//}
+
+void ACharacterController::SwitchTargetOnLeft()
+{
+    UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
+    Cast<APlayerCharacter>(GetPawn())->SwitchTargetOnLeft();
+}
+
+void ACharacterController::SwitchTargetOnRight()
+{
+    UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
+    Cast<APlayerCharacter>(GetPawn())->SwitchTargetOnRight();
+
 }
