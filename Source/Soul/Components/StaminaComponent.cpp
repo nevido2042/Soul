@@ -9,7 +9,8 @@ UStaminaComponent::UStaminaComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-	// ...
+	MaxStamina = 100.0f;
+	CurrentStamina = MaxStamina;
 }
 
 
@@ -18,7 +19,7 @@ void UStaminaComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CurrentStamina = MaxStamina;
+	//CurrentStamina = MaxStamina;
 	// ...
 	
 }
