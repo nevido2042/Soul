@@ -20,6 +20,10 @@ public:
 protected:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
+	UPROPERTY(EditAnywhere)
+	float AttackRange = 150.0f;
+
 private:
-	bool IsTargetInRange(AActor* TargetActor, AActor* ControlledPawn, float AttackRange) const;
+	bool IsTargetInRange(AActor* TargetActor, AActor* ControlledPawn, float InAttackRange) const;
+
 };

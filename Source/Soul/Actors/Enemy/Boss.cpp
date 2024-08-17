@@ -7,16 +7,19 @@
 #include "UI/EnemyHPBar.h"
 #include "Components/HealthComponent.h"
 #include "UI/BossHealthBar.h"
+#include "Components/AudioComponent.h"
 
 ABoss::ABoss()
 {
-
     if (HealthBarWidgetComponent)
     {
         HealthBarWidgetComponent->DestroyComponent();
         HealthBarWidgetComponent = nullptr;
     }
 
+    BossBGM = CreateDefaultSubobject<UAudioComponent>(TEXT("BossBGM"));
+    BossBGM->SetupAttachment(RootComponent);
+    BossBGM->SetAutoActivate(false);
 }
 
 void ABoss::BeginPlay()
@@ -59,6 +62,19 @@ void ABoss::DestroyBossHealthBar()
     }
 }
 
+void ABoss::PlayBossBGM()
+{
+    if (BossBGM->IsPlaying()) return;
+    if (bIsDie) return;
+
+    BossBGM->Play();
+}
+
+void ABoss::StopBossBGM()
+{
+    BossBGM->Stop();
+}
+
 float ABoss::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
     Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -72,6 +88,7 @@ void ABoss::Die()
 {
     Super::Die();
     DestroyBossHealthBar();
+    StopBossBGM();
 }
 
 void ABoss::UpdateHealthBar()

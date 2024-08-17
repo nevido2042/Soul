@@ -15,6 +15,7 @@ void ABossController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimu
 	if (Boss)
 	{
 		Boss->CreateBossHealthBar();
+		Boss->PlayBossBGM();
 	}
 }
 
@@ -26,5 +27,6 @@ void ABossController::OnTargetPerceptionForgotten(AActor* Actor)
 	if (Boss)
 	{
 		Boss->DestroyBossHealthBar();
+		Boss->StopBossBGM();
 	}
 }

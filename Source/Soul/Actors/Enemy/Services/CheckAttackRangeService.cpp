@@ -23,16 +23,15 @@ void UCheckAttackRangeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
     if (TargetActor && ControlledPawn)
     {
-        float AttackRange = /*BlackboardComp->GetValueAsFloat("AttackRange");*/200.f;
         bool bIsInRange = IsTargetInRange(TargetActor, ControlledPawn, AttackRange);
         BlackboardComp->SetValueAsBool("bIsTargetInRange", bIsInRange);
     }
 }
 
-bool UCheckAttackRangeService::IsTargetInRange(AActor* TargetActor, AActor* ControlledPawn, float AttackRange) const
+bool UCheckAttackRangeService::IsTargetInRange(AActor* TargetActor, AActor* ControlledPawn, float InAttackRange) const
 {
     if (!TargetActor || !ControlledPawn) return false;
 
     float Distance = FVector::Dist(TargetActor->GetActorLocation(), ControlledPawn->GetActorLocation());
-    return Distance <= AttackRange;
+    return Distance <= InAttackRange;
 }
