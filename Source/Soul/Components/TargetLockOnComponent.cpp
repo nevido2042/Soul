@@ -146,9 +146,6 @@ AActor* UTargetLockOnComponent::GetTargetOnLeft()
                 {
                     CompareFloat = CheckFloat;
                     TempTargetLockOn = Target;
-
-                    Cast<AEnemy>(TempTargetLockOn)->HideLockOnWidget(false);
-                    Cast<AEnemy>(TargetLockOn)->HideLockOnWidget(true);
                 }
             }
         }
@@ -160,6 +157,13 @@ AActor* UTargetLockOnComponent::GetTargetOnLeft()
 
         DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5.0f, 0, 2.0f);
     }
+
+    if (TempTargetLockOn)
+    {
+        Cast<AEnemy>(TempTargetLockOn)->HideLockOnWidget(false);
+        Cast<AEnemy>(TargetLockOn)->HideLockOnWidget(true);
+    }
+
     return TempTargetLockOn;
 }
 
@@ -214,9 +218,6 @@ AActor* UTargetLockOnComponent::GetTargetOnRight()
                 {
                     CompareFloat = CheckFloat;
                     TempTargetLockOn = Target;
-
-                    Cast<AEnemy>(TempTargetLockOn)->HideLockOnWidget(false);
-                    Cast<AEnemy>(TargetLockOn)->HideLockOnWidget(true);
                 }
             }
         }
@@ -228,6 +229,13 @@ AActor* UTargetLockOnComponent::GetTargetOnRight()
 
         DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5.0f, 0, 2.0f);
     }
+
+    if (TempTargetLockOn)
+    {
+        Cast<AEnemy>(TempTargetLockOn)->HideLockOnWidget(false);
+        Cast<AEnemy>(TargetLockOn)->HideLockOnWidget(true);
+    }
+
     return TempTargetLockOn;
 }
 
