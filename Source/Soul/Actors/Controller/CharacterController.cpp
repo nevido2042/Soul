@@ -139,26 +139,6 @@ void ACharacterController::LockOn()
     Cast<APlayerCharacter>(GetPawn())->TargetLockOn();
 }
 
-//void ACharacterController::SwitchTarget(const FInputActionValue& Value)
-//{
-//    float WheelDelta = Value.Get<float>();
-//
-//    // Check the direction of the wheel movement
-//    if (WheelDelta > 0.0f)
-//    {
-//        UE_LOG(LogTemp, Warning, TEXT("%f"), WheelDelta);
-//        // Wheel was moved up
-//        //SwitchToNextTarget();
-//    }
-//    else if (WheelDelta < 0.0f)
-//    {
-//        UE_LOG(LogTemp, Warning, TEXT("%f"), WheelDelta);
-//        // Wheel was moved down
-//        //SwitchToPreviousTarget();
-//    }
-//
-//}
-
 void ACharacterController::SwitchTargetOnLeft()
 {
     UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));

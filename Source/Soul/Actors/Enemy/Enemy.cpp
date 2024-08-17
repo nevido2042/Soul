@@ -79,41 +79,48 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 			UAISense_Damage::ReportDamageEvent(GetWorld(), this, EventInstigator, DamageAmount, DamageCauser->GetActorLocation(), GetActorLocation());
 		}
 	}
-	
-	if (UEnemyHealthBar* EnemyHPBar = Cast<UEnemyHealthBar>(HealthBarWidgetComponent->GetWidget()))
+
+	if (HealthBarWidgetComponent)
 	{
-		EnemyHPBar->UpdateHPBar(HealthComponent->CurrentHealth / HealthComponent->DefaultHealth);
-		
-		HealthBarWidgetComponent->SetVisibility(true);
-		FTimerHandle HealthHideTimer;
-		GetWorldTimerManager().SetTimer(HealthHideTimer, this, &AEnemy::HideHealthBar, 5.F, false);
+		if (UEnemyHealthBar* EnemyHPBar = Cast<UEnemyHealthBar>(HealthBarWidgetComponent->GetWidget()))
+		{
+			EnemyHPBar->UpdateHPBar(HealthComponent->CurrentHealth / HealthComponent->DefaultHealth);
+
+			HealthBarWidgetComponent->SetVisibility(true);
+			FTimerHandle HealthHideTimer;
+			GetWorldTimerManager().SetTimer(HealthHideTimer, this, &AEnemy::HideHealthBar, 5.F, false);
+		}
 	}
 
 	if (HealthComponent->CurrentHealth <= 0.f)
 	{
-		//die
-		bIsDie = true;
-
-		StopAnimMontage();
-
-		Cast<UEnemyAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-		GetCharacterMovement()->StopMovementImmediately();
-		GetCharacterMovement()->DisableMovement();
-
-		// Stop the behavior tree
-		AAIController* AIController = Cast<AAIController>(GetController());
-		if (AIController && AIController->BrainComponent)
-		{
-			AIController->BrainComponent->StopLogic("Death");
-		}
-
-		LockOnTarget->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Die();
 	}
 
 	return DamageAmount;
 
+}
+
+void AEnemy::Die()
+{
+	bIsDie = true;
+
+	StopAnimMontage();
+
+	Cast<UEnemyAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->DisableMovement();
+
+	// Stop the behavior tree
+	AAIController* AIController = Cast<AAIController>(GetController());
+	if (AIController && AIController->BrainComponent)
+	{
+		AIController->BrainComponent->StopLogic("Death");
+	}
+
+	LockOnTarget->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AEnemy::HideHealthBar()

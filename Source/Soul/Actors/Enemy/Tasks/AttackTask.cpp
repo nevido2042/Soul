@@ -24,13 +24,21 @@ EBTNodeResult::Type UAttackTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, 
         UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
         AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(TEXT("TargetActor")));
 
-        // Calculate the rotation to look at the target actor
+        // 대상 액터의 위치를 가져옴
         FVector TargetLocation = TargetActor->GetActorLocation();
         FVector AICharacterLocation = AIController->GetPawn()->GetActorLocation();
+
+        // 대상 액터를 바라보는 방향의 회전을 계산
         FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(AICharacterLocation, TargetLocation);
 
-        // Set the AI character's rotation to look at the target actor
-        AIController->GetPawn()->SetActorRotation(LookAtRotation);
+        // 현재 AI 캐릭터의 회전을 가져옴
+        FRotator CurrentRotation = AIController->GetPawn()->GetActorRotation();
+
+        // 현재 회전에서 Yaw 값만 LookAtRotation의 Yaw 값으로 업데이트
+        FRotator NewRotation = FRotator(CurrentRotation.Pitch, LookAtRotation.Yaw, CurrentRotation.Roll);
+
+        // AI 캐릭터의 회전을 새롭게 설정된 Yaw 값을 포함하여 업데이트
+        AIController->GetPawn()->SetActorRotation(NewRotation);
 
         AEnemy* Enemy = Cast<AEnemy>(ControlledPawn);
         if (Enemy)

@@ -35,6 +35,9 @@ protected:
 public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	bool GetIsDie() { return bIsDie; }
+
+protected:
+	virtual void Die();
 private:
 	UFUNCTION()
 	void HideHealthBar();

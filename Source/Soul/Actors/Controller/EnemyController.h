@@ -25,10 +25,10 @@ protected:
 	class UAIPerceptionComponent* EnemyPerceptionComponent;
 
 	UFUNCTION()
-	void OnTargetPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
+	virtual void OnTargetPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
 
 	UFUNCTION()
-	void OnTargetPerceptionForgotten(AActor* Actor);
+	virtual void OnTargetPerceptionForgotten(AActor* Actor);
 
 protected:
 	virtual ETeamAttitude::Type GetTeamAttitudeTowards(const AActor& Other) const override;
