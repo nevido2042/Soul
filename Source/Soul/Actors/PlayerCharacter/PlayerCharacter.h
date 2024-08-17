@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 //#include "GenericTeamAgentInterface.h" //team
+#include "Components/TimelineComponent.h"
 #include "PlayerCharacter.generated.h"
 
 class UAnimMontage;
@@ -134,13 +135,6 @@ protected:
 	UFUNCTION()
 	void OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 
-//protected:
-//	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
-//	void SetGenericTeamId(const FGenericTeamId& NewTeamId) { TeamId = NewTeamId; }
-//
-//private:
-//	FGenericTeamId TeamId;
-
 public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -150,4 +144,32 @@ protected:
 protected:
 	class ASoulPlayerState* SoulPlayerState;
 	class ASoulHUD* SoulHUD;
+
+protected:
+	void RefreshStaminaRegeneration(bool bStartStaminaRegeneration);
+
+	// 타임라인 컴포넌트 선언
+	UPROPERTY()
+	class UTimelineComponent* StaminaRegenerationLooperTimeline;
+
+	// 타임라인의 함수 핸들러 선언
+	FOnTimelineFloat OnTimelineUpdate;
+	FOnTimelineEvent OnTimelineFinished;
+
+	// 타임라인 콜백 함수
+	UFUNCTION()
+	void StaminaRegenTick(float Value);
+
+	UFUNCTION()
+	void HandleTimelineFinished();
+
+	// 타임라인에 사용할 커브
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	UCurveFloat* StaminaCurve;
+
+	FTimerHandle StartRegenStaminaHandle;
+	UFUNCTION()
+	void StartRegenStamina();
+
+	bool TryActionUseStamina(float InCost);
 };

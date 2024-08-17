@@ -11,7 +11,7 @@
  */
 
 class UHealthComponent;
-
+class UStaminaComponent;
 UCLASS()
 class SOUL_API ASoulPlayerState : public APlayerState
 {
@@ -23,7 +23,13 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	UHealthComponent* HealthComponent;
+
+protected:
+	UPROPERTY(EditAnywhere)
+	UStaminaComponent* StaminaComponent;
 	
 public:
 	UHealthComponent* GetHealthComponent();
+	UStaminaComponent* GetStaminaComponent();
+
 };

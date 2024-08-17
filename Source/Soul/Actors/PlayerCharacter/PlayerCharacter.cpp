@@ -16,6 +16,8 @@
 #include "Components/TargetLockOnComponent.h"
 #include "Components/AudioComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Components/TimelineComponent.h"
+#include "Components/StaminaComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -41,6 +43,8 @@ APlayerCharacter::APlayerCharacter()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->SetAutoActivate(false);
+
+	StaminaRegenerationLooperTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("StaminaRegenerationLooperTimeline"));
 }
 
 // Called when the game starts or when spawned
@@ -67,7 +71,21 @@ void APlayerCharacter::BeginPlay()
 		WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	}
 
-	// OnMovementModeChanged 이벤트 바인딩
+	if (StaminaCurve)
+	{
+		// 타임라인에 커브 적용
+		OnTimelineUpdate.BindUFunction(this, FName("StaminaRegenTick"));
+		OnTimelineFinished.BindUFunction(this, FName("HandleTimelineFinished"));
+
+		StaminaRegenerationLooperTimeline->AddInterpFloat(StaminaCurve, OnTimelineUpdate);
+		StaminaRegenerationLooperTimeline->SetTimelineFinishedFunc(OnTimelineFinished);
+
+		// 루프 설정 (필요 시)
+		StaminaRegenerationLooperTimeline->SetLooping(true);
+
+		//// 타임라인 시작
+		//StaminaRegenerationLooperTimeline->PlayFromStart();
+	}
 }
 
 void APlayerCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
@@ -230,6 +248,11 @@ void APlayerCharacter::Jump()
 		return;
 	}
 
+	if (TryActionUseStamina(20.f) == false)
+	{
+		return;
+	}
+
 	Super::Jump();
 }
 
@@ -333,5 +356,75 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	}
 
 	return DamageAmount;
+}
+
+void APlayerCharacter::RefreshStaminaRegeneration(bool bStartStaminaRegeneration)
+{
+	if (bStartStaminaRegeneration)
+	{
+		StaminaRegenerationLooperTimeline->PlayFromStart();
+	}
+	else
+	{
+		StaminaRegenerationLooperTimeline->Stop();
+	}
+}
+
+void APlayerCharacter::StaminaRegenTick(float Value)
+{
+	// 타임라인 업데이트 시 호출될 로직
+	UE_LOG(LogTemp, Warning, TEXT("Timeline Update: %f"), Value);
+
+	float CurrentStamina = SoulPlayerState->GetStaminaComponent()->CurrentStamina;
+	float MaxStamina = SoulPlayerState->GetStaminaComponent()->MaxStamina;
+
+	if (CurrentStamina >= MaxStamina)
+	{
+		RefreshStaminaRegeneration(false);
+		SoulPlayerState->GetStaminaComponent()->CurrentStamina = MaxStamina;
+	}
+	else
+	{
+		float StaminaRegen = SoulPlayerState->GetStaminaComponent()->StaminaRegen;
+
+		float Result = CurrentStamina + StaminaRegen;
+		SoulPlayerState->GetStaminaComponent()->CurrentStamina = Result;
+	}
+
+	SoulHUD->UpdateStatusWidget();
+	//RefreshStanimaBar();
+}
+
+void APlayerCharacter::HandleTimelineFinished()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Timeline Finished"));
+}
+
+bool APlayerCharacter::TryActionUseStamina(float InCost)
+{
+	if (SoulPlayerState->GetStaminaComponent()->CurrentStamina < 0.1f) //0.f으로 하면 안걸린다 ㅋㅋ
+	{
+		return false;
+	}
+
+	StaminaRegenerationLooperTimeline->Stop();
+	SoulPlayerState->GetStaminaComponent()->DecreaseStamina(InCost);
+	SoulHUD->UpdateStatusWidget();
+
+	// 1초 뒤에 DelayedRefreshStamina 함수를 실행합니다.
+	GetWorld()->GetTimerManager().SetTimer(
+		StartRegenStaminaHandle, // FTimerHandle 변수
+		this, // 호출할 객체
+		&APlayerCharacter::StartRegenStamina, // 호출할 함수
+		1.0f, // 지연 시간 (초)
+		false // 반복 여부 (false로 설정하여 한 번만 호출)
+	);
+
+	return true;
+}
+
+void APlayerCharacter::StartRegenStamina()
+{
+	RefreshStaminaRegeneration(true);
 }
 
