@@ -56,6 +56,60 @@ void APlayerCharacter::BeginPlay()
 	{
 		WeaponActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
 	}
+
+	// OnMovementModeChanged 이벤트 바인딩
+}
+
+void APlayerCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	TempPreviousMovementMode = PrevMovementMode;
+	TempPreviousCustomMode = PreviousCustomMode;
+
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+
+	// 새로운 Movement Mode 가져오기
+	EMovementMode NewMovementMode = GetCharacterMovement()->MovementMode;
+
+	switch (NewMovementMode)
+	{
+	case MOVE_Walking:
+		UE_LOG(LogTemp, Warning, TEXT("Character is now walking"));
+		break;
+	case MOVE_Falling:
+		UE_LOG(LogTemp, Warning, TEXT("Character is now falling"));
+		if (GetVelocity().Z < -1000.f)
+		{
+			bHardLanding = true;
+		}
+		else
+		{
+			// Start a timer to retry the movement mode change after 0.2 seconds
+			GetWorld()->GetTimerManager().SetTimer(MovementModeTimerHandle, this, &APlayerCharacter::RetryMovementModeChange, 0.2f, false);
+		}
+		break;
+	case MOVE_Swimming:
+		UE_LOG(LogTemp, Warning, TEXT("Character is now swimming"));
+		break;
+	case MOVE_Flying:
+		UE_LOG(LogTemp, Warning, TEXT("Character is now flying"));
+		break;
+	default:
+		UE_LOG(LogTemp, Warning, TEXT("Character movement mode changed"));
+		break;
+	}
+
+	if (bHardLanding && NewMovementMode == EMovementMode::MOVE_Walking)
+	{
+		GetCharacterMovement()->DisableMovement();
+		PlayAnimMontage(HardLandingMontage);
+		bHardLanding = false;
+
+		// 딜레이 시간 계산
+		float MontageDuration = HardLandingMontage->GetPlayLength();
+
+		// 딜레이 후 MovementMode 재설정
+		GetWorld()->GetTimerManager().SetTimer(HardLandingTimerHandle, this, &APlayerCharacter::ResetMovementMode, MontageDuration, false);
+	}
 }
 
 // Called every frame
@@ -193,6 +247,18 @@ void APlayerCharacter::TargetLockOn()
 		UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
 		TargetLockOnComponent->TriggerTargetLockOn();
 	}
+}
+
+void APlayerCharacter::RetryMovementModeChange()
+{
+	OnMovementModeChanged(TempPreviousMovementMode, TempPreviousCustomMode);
+
+}
+
+void APlayerCharacter::ResetMovementMode()
+{
+	// 이동 모드 재설정
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
 void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)

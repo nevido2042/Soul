@@ -23,6 +23,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Movement mode change handler
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -68,6 +71,23 @@ private:
 
 	bool bStrongAttack = false;
 
+	bool bHardLanding = false;
+
+protected:
+	EMovementMode TempPreviousMovementMode;
+	uint8 TempPreviousCustomMode;
+
+	FTimerHandle MovementModeTimerHandle;
+	UFUNCTION()
+	void RetryMovementModeChange();
+
+
+	FTimerHandle HardLandingTimerHandle;
+	UFUNCTION()
+	void ResetMovementMode();
+
+protected:
+
 	UPROPERTY(EditAnywhere)
 	float RunSpeed = 600.f;
 
@@ -90,6 +110,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* BackDodgeMontage = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* HardLandingMontage = nullptr;
 
 	UFUNCTION()
 	void OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
