@@ -26,8 +26,11 @@ protected:
 	/*UPROPERTY(EditAnywhere)
 	USoundBase* HitSound = nullptr;*/
 
-	UPROPERTY(EditAnywhere)
-	class UAudioComponent* AudioComponent = nullptr;
+	//UPROPERTY(EditAnywhere)
+	//class UAudioComponent* AudioComponent = nullptr;
+protected:
+	AActor* OwnerActor;
+	AController* OwnerCont;
 
 public:
 	void BeginHitDetect();

@@ -43,25 +43,9 @@ void AEnemyController::OnTargetPerceptionForgotten(AActor* Actor)
 
 ETeamAttitude::Type AEnemyController::GetTeamAttitudeTowards(const AActor& Other) const
 {
-    //controller로 들어올 때
     if (const AController* OtherController = Cast<AController>(&Other))
     {
         if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherController))
-        {
-            FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();
-            if (OtherTeamID == GetGenericTeamId()) {
-                return ETeamAttitude::Friendly;
-            }
-            else {
-                return ETeamAttitude::Hostile;
-            }
-        }
-    }
-
-    //pawn으로 들어올 때
-    if (const APawn* OtherPawn = Cast<APawn>(&Other))
-    {
-        if (const IGenericTeamAgentInterface* TeamAgent = Cast<IGenericTeamAgentInterface>(OtherPawn->GetController()))
         {
             FGenericTeamId OtherTeamID = TeamAgent->GetGenericTeamId();
             if (OtherTeamID == GetGenericTeamId()) {

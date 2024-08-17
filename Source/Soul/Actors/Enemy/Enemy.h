@@ -55,6 +55,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UWidgetComponent* LockOnWidgetComponent;
 
+	UPROPERTY(EditAnywhere)
+	class UParticleSystemComponent* ParticleSystem;
+
 public:
 	void HideLockOnWidget(bool InBool);
 public:

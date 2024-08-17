@@ -7,7 +7,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
 #include "Data/TraceData.h"
-#include "Actors/PlayerCharacter/PlayerCharacter.h"
 
 // Sets default values
 ASword::ASword()
@@ -82,8 +81,7 @@ void ASword::HitDetect()
 
 	if (bHit)
 	{
-		float Damage = Cast<APlayerCharacter>(OwnerActor)->GetAttackDamage();
-		UGameplayStatics::ApplyDamage(HitResult.GetActor(), Damage, OwnerCont, OwnerActor, nullptr);
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 10.f, OwnerCont, OwnerActor, nullptr);
 		IgnoreActors.Add(HitResult.GetActor());
 		/*AudioComponent->Play();*/
 	}

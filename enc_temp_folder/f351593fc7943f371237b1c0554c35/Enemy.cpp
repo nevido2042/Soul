@@ -186,7 +186,7 @@ void AEnemy::HitDetect()
 
 	if (bHit)
 	{
-		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 10.f, nullptr, nullptr, nullptr);
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 10.f, GetController(), this, nullptr);
 		IgnoreActors.Add(HitResult.GetActor());
 		AudioComponent->Play();
 	}

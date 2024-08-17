@@ -61,8 +61,6 @@ public:
 
 	void TargetLockOn();
 
-	float GetAttackDamage() { return AttackDmage; }
-	void SetAttackDamage(float InValue) { AttackDmage = InValue; }
 private:
 	bool bRun = false;
 
@@ -75,9 +73,6 @@ private:
 	float JogSpeed = 300.f;
 
 	int AttackIndex = 0;
-
-	UPROPERTY(EditAnywhere)
-	int AttackDmage = 10.f;
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* AttackMontage = nullptr;

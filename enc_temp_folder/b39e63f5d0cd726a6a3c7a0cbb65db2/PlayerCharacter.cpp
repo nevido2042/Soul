@@ -106,8 +106,6 @@ void APlayerCharacter::Attack()
 			return;
 		}
 
-		SetAttackDamage(20.f);
-
 		PlayAnimMontage(StrongAttackMontage);
 	}
 	else
@@ -116,8 +114,6 @@ void APlayerCharacter::Attack()
 		{
 			return;
 		}
-
-		SetAttackDamage(10.f);
 
 		PlayAnimMontage(AttackMontage);
 	}
