@@ -16,7 +16,7 @@ void UCheckStaminaNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequence
 		if (PlayerCharacter)
 		{
 			// 스태미나 사용 시도가 실패한 경우
-			if (PlayerCharacter->TryActionUseStamina(20.f) == false)
+			if (PlayerCharacter->TryActionUseStamina(10.f) == false)
 			{
 				// 현재 실행 중인 몽타주를 멈춤
 				UAnimInstance* AnimInstance = PlayerCharacter->GetMesh()->GetAnimInstance();

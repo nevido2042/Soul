@@ -27,5 +27,12 @@ EBTNodeResult::Type UMoveToTargetActorTask::ExecuteTask(UBehaviorTreeComponent& 
 
     AIController->MoveToActor(TargetActor);
 
+    FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
     return EBTNodeResult::Succeeded;
 }
+
+//EBTNodeResult::Type UMoveToTargetActorTask::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+//{
+//
+//    return EBTNodeResult::Succeeded;
+//}

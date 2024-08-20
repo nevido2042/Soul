@@ -14,17 +14,32 @@ void URotateLastInput::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 		if (PlayerCharacter)
 		{
 			//if Lock on No Rotate
-			if (PlayerCharacter->GetTargetLockOnComponent()->GetIsLockOn()) return;
-
-			FVector NewVector = PlayerCharacter->GetLastMovementInputVector();
-
-			// 입력이 없으면 OwnerActor의 Forward Vector를 사용
-			if (NewVector.IsNearlyZero())
+			if (PlayerCharacter->GetTargetLockOnComponent()->GetIsLockOn())
 			{
-				NewVector = OwnerActor->GetActorForwardVector();
+				APawn* Pawn = Cast<APawn>(OwnerActor);
+				FRotator CurRot = OwnerActor->GetActorRotation();
+				FRotator NewRot;
+				if (Pawn)
+				{
+					NewRot = Pawn->GetController()->GetControlRotation();
+					NewRot = FRotator(CurRot.Pitch, NewRot.Yaw, CurRot.Roll);
+				}
+				
+				PlayerCharacter->SetActorRotation(NewRot);
+			}
+			else
+			{
+				FVector NewVector = PlayerCharacter->GetLastMovementInputVector();
+
+				// 입력이 없으면 OwnerActor의 Forward Vector를 사용
+				if (NewVector.IsNearlyZero())
+				{
+					NewVector = OwnerActor->GetActorForwardVector();
+				}
+
+				PlayerCharacter->SetActorRotation(NewVector.ToOrientationQuat());
 			}
 
-			PlayerCharacter->SetActorRotation(NewVector.ToOrientationQuat());
 		}
 	}
 }

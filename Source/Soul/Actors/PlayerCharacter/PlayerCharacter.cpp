@@ -217,7 +217,7 @@ void APlayerCharacter::RollOrDodge()
 		return;
 	}
 
-	if (TryActionUseStamina(20.f) == false)
+	if (TryActionUseStamina(10.f) == false)
 	{
 		return;
 	}
@@ -277,7 +277,7 @@ void APlayerCharacter::Jump()
 		return;
 	}
 
-	if (TryActionUseStamina(20.f) == false)
+	if (TryActionUseStamina(10.f) == false)
 	{
 		return;
 	}
@@ -331,7 +331,7 @@ void APlayerCharacter::ResetMovementMode()
 
 void APlayerCharacter::OnMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
-	//if (TryActionUseStamina(20.f) == false)
+	//if (TryActionUseStamina(10.f) == false)
 	//{
 	//	GetMesh()->GetAnimInstance()->Montage_Stop(0.35f);
 	//	AttackIndex = 0;
