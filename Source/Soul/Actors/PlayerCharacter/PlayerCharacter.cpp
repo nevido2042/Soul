@@ -18,6 +18,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Components/StaminaComponent.h"
+#include "DamageTypes/PoisonDamageType.h"
+#include "GameFramework/DamageType.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -361,10 +363,15 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		ParticleSystem->ActivateSystem();
 		AudioComponent->Play();
 
-		GetCharacterMovement()->DisableMovement();
-		float MontageDuration = ImpactMontage->GetPlayLength();
-		PlayAnimMontage(ImpactMontage);
-		GetWorld()->GetTimerManager().SetTimer(HardLandingTimerHandle, this, &APlayerCharacter::ResetMovementMode, MontageDuration, false);
+		/*const UPoisonDamageType* PointDamageEvent = Cast<const UPoisonDamageType>(&DamageEvent);
+		if (PointDamageEvent != nullptr)
+		{*/
+			GetCharacterMovement()->DisableMovement();
+			float MontageDuration = ImpactMontage->GetPlayLength();
+			PlayAnimMontage(ImpactMontage);
+			FTimerHandle TimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ResetMovementMode, MontageDuration, false);
+		//}
 
 		if (SoulPlayerState->GetHealthComponent()->CurrentHealth <= 0.f)
 		{

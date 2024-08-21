@@ -31,6 +31,7 @@ void URangedAttackComponent::PerformRangedAttack(const FVector& LaunchDirection,
         // Set projectile damage
         Projectile->SetDamage(AttackDamage);
         Projectile->LaunchProjectile(LaunchDirection, TargetDistance);
+        Projectile->OwnerActor = Character;
         // Set projectile speed or other properties if needed
     }
 }
