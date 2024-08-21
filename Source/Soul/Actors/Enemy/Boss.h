@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UAudioComponent* BossBGM;
 
+	UPROPERTY(EditAnywhere)
+	class URangedAttackComponent*  RangedAttackComponent;
+
 public:
 	void CreateBossHealthBar();
 	void DestroyBossHealthBar();

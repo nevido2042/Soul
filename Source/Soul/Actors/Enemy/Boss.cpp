@@ -8,6 +8,7 @@
 #include "Components/HealthComponent.h"
 #include "UI/BossHealthBar.h"
 #include "Components/AudioComponent.h"
+#include "Components/RangedAttackComponent.h"
 
 ABoss::ABoss()
 {
@@ -20,6 +21,8 @@ ABoss::ABoss()
     BossBGM = CreateDefaultSubobject<UAudioComponent>(TEXT("BossBGM"));
     BossBGM->SetupAttachment(RootComponent);
     BossBGM->SetAutoActivate(false);
+
+    RangedAttackComponent = CreateDefaultSubobject<URangedAttackComponent>(TEXT("RangedAttackComponent"));
 }
 
 void ABoss::BeginPlay()
