@@ -58,7 +58,7 @@ void APoisonFog::ApplyDamageToOverlappedActors(float DeltaTime)
 {
     for (AActor* Actor : OverlappedActors)
     {
-        if (Actor)
+        if (IsValid(Actor))
         {
             UGameplayStatics::ApplyDamage(Actor, DamagePerSecond * DeltaTime, GetInstigatorController(), nullptr, UPoisonDamageType::StaticClass());
         }

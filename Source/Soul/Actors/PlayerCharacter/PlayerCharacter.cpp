@@ -19,7 +19,7 @@
 #include "Components/TimelineComponent.h"
 #include "Components/StaminaComponent.h"
 #include "DamageTypes/PoisonDamageType.h"
-#include "GameFramework/DamageType.h"
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -360,24 +360,23 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		}
 		SoulPlayerState->GetHealthComponent()->GetDamage(DamageAmount);
 
-		ParticleSystem->ActivateSystem();
-		AudioComponent->Play();
-
-		/*const UPoisonDamageType* PointDamageEvent = Cast<const UPoisonDamageType>(&DamageEvent);
-		if (PointDamageEvent != nullptr)
-		{*/
+		if (DamageEvent.DamageTypeClass != UPoisonDamageType::StaticClass())
+		{
 			GetCharacterMovement()->DisableMovement();
 			float MontageDuration = ImpactMontage->GetPlayLength();
 			PlayAnimMontage(ImpactMontage);
 			FTimerHandle TimerHandle;
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlayerCharacter::ResetMovementMode, MontageDuration, false);
-		//}
+			ParticleSystem->ActivateSystem();
+			AudioComponent->Play();
+		}
 
 		if (SoulPlayerState->GetHealthComponent()->CurrentHealth <= 0.f)
 		{
 			bIsDie = true;
 			//die
 			StopAnimMontage();
+			AudioComponent->Play();
 
 			Cast<USoulPlayerAnimInstance>(GetMesh()->GetAnimInstance())->SetDie(true);
 
