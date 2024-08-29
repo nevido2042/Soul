@@ -22,7 +22,7 @@ protected:
 
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-    float DefaultHealth;
+    float DefaultHealth = 100.f;
 
     UPROPERTY(BlueprintReadOnly, Category = "Health")
     float CurrentHealth;

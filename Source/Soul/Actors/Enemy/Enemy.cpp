@@ -17,6 +17,8 @@
 #include "Components/SphereComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Perception/AISense_Damage.h"
+#include "DamageTypes/PoisonDamageType.h"
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -61,17 +63,20 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 
 	if (HealthComponent)
 	{
-		HealthComponent->GetDamage(DamageAmount);
-
-		if (StunnedMontage)
+		if (DamageEvent.DamageTypeClass != UPoisonDamageType::StaticClass())
 		{
-			GetCharacterMovement()->StopMovementImmediately();
-			StopAnimMontage();
-			PlayAnimMontage(StunnedMontage);
+			if (StunnedMontage)
+			{
+				GetCharacterMovement()->StopMovementImmediately();
+				StopAnimMontage();
+				PlayAnimMontage(StunnedMontage);
+			}
+
+			ParticleSystem->ActivateSystem();
+			AudioComponent->Play();
 		}
 
-		ParticleSystem->ActivateSystem();
-		AudioComponent->Play();
+		HealthComponent->GetDamage(DamageAmount);
 
 		// 데미지 이벤트 보고
 		if (EventInstigator && DamageCauser)

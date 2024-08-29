@@ -9,14 +9,17 @@ UHealthComponent::UHealthComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-	DefaultHealth = 100.0f;
-	CurrentHealth = DefaultHealth;
+	//DefaultHealth = 100.0f;
+	//CurrentHealth = DefaultHealth;
 	// ...
 }
 
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	/*DefaultHealth = 100.0f;*/
+	CurrentHealth = DefaultHealth;
 }
 
 void UHealthComponent::GetDamage(float DamageAmount)
